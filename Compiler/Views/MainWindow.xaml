@@ -6,32 +6,82 @@
         xmlns:local="clr-namespace:Compiler"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="Компилятор" Height="450" Width="800">
-    <Grid>
+        Title="Компилятор" Height="600" Width="1000" MinHeight="300" MinWidth="400" Icon="../Resources/logo.ico">
+
+    <Grid Background="WhiteSmoke">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="0.6*"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="0.4*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <Menu Grid.Row="0" Background="WhiteSmoke" ItemContainerStyle="{StaticResource MenuItemStyle}">
+        <Menu Grid.Row="0" FontSize="15" Background="WhiteSmoke" ItemContainerStyle="{StaticResource MenuItemStyle}">
             <MenuItem Header="Файл" ItemContainerStyle="{StaticResource MenuItemStyle}">
-                <MenuItem Header="Создать"/>
-                <MenuItem Header="Открыть"/>
-                <MenuItem Header="Сохранить"/>
-                <MenuItem Header="Сохранить как"/>
-                <MenuItem Header="Выход"/>
+                <MenuItem Header="Создать">
+                    <MenuItem.Icon>
+                        <materialDesign:PackIcon Kind="FileOutline"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Открыть">
+                    <MenuItem.Icon>
+                        <materialDesign:PackIcon Kind="FolderOpenOutline"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Сохранить">
+                    <MenuItem.Icon>
+                        <materialDesign:PackIcon Kind="ContentSaveOutline"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Сохранить как">
+                    <MenuItem.Icon>
+                        <materialDesign:PackIcon Kind="ContentSaveAddOutline"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Выход">
+                    <MenuItem.Icon>
+                        <materialDesign:PackIcon Kind="ExitToApp"/>
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
             <MenuItem Header="Правка" ItemContainerStyle="{StaticResource MenuItemStyle}">
-                <MenuItem Header="Отменить"/>
-                <MenuItem Header="Повторить"/>
-                <MenuItem Header="Вырезать"/>
-                <MenuItem Header="Копировать"/>
-                <MenuItem Header="Вставить"/>
-                <MenuItem Header="Удалить"/>
-                <MenuItem Header="Выделиить все"/>
+                <MenuItem Header="Отменить">
+                    <MenuItem.Icon>
+                        <materialDesign:PackIcon Kind="ArrowBack"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Повторить">
+                    <MenuItem.Icon>
+                        <materialDesign:PackIcon Kind="ArrowForward"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Вырезать" Click="CutSelectedText">
+                    <MenuItem.Icon>
+                        <materialDesign:PackIcon Kind="ContentCut"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Копировать" Click="CopySelectedText">
+                    <MenuItem.Icon>
+                        <materialDesign:PackIcon Kind="ContentCopy"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Вставить" Click="PasteText">
+                    <MenuItem.Icon>
+                        <materialDesign:PackIcon Kind="ContentPaste"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Удалить" Click="DeleteSelectedText">
+                    <MenuItem.Icon>
+                        <materialDesign:PackIcon Kind="DeleteOutline"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Выделиить все" Click="SelectAllText">
+                    <MenuItem.Icon>
+                        <materialDesign:PackIcon Kind="SelectAll"/>
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
             <MenuItem Header="Текст" ItemContainerStyle="{StaticResource MenuItemStyle}">
                 <MenuItem Header="Постановка задачи"/>
@@ -45,11 +95,19 @@
             </MenuItem>
             <MenuItem Header="Пуск"/>
             <MenuItem Header="Справка" ItemContainerStyle="{StaticResource MenuItemStyle}">
-                <MenuItem Header="Вызов справки"/>
-                <MenuItem Header="О программе"/>
+                <MenuItem Header="Вызов справки">
+                    <MenuItem.Icon>
+                        <materialDesign:PackIcon Kind="QuestionMarkCircleOutline"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="О программе">
+                    <MenuItem.Icon>
+                        <materialDesign:PackIcon Kind="AboutCircleOutline"/>
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
         </Menu>
-        
+
         <ToolBarTray Grid.Row="1">
             <ToolBar>
                 <Button Padding="5">
@@ -83,19 +141,19 @@
                     </Button.ToolTip>
                     <materialDesign:PackIcon Kind="ArrowForward" />
                 </Button>
-                <Button Padding="5">
+                <Button Padding="5" Click="CopySelectedText">
                     <Button.ToolTip>
                         <ToolTip Content="Копировать" />
                     </Button.ToolTip>
                     <materialDesign:PackIcon Kind="ContentCopy" />
                 </Button>
-                <Button Padding="5">
+                <Button Padding="5" Click="CutSelectedText">
                     <Button.ToolTip>
                         <ToolTip Content="Вырезать" />
                     </Button.ToolTip>
                     <materialDesign:PackIcon Kind="ContentCut" />
                 </Button>
-                <Button Padding="5">
+                <Button Padding="5" Click="PasteText">
                     <Button.ToolTip>
                         <ToolTip Content="Вставить" />
                     </Button.ToolTip>
@@ -123,12 +181,17 @@
             </ToolBar>
         </ToolBarTray>
 
-        <RichTextBox Grid.Row="2" Margin="10" VerticalScrollBarVisibility="Auto" VerticalAlignment="Stretch">
+        <RichTextBox Grid.Row="2" x:Name="MyRichTextBox" Margin="5" SelectionChanged="MyRichTextBox_SelectionChanged" Background="White" FontSize="15" VerticalScrollBarVisibility="Auto" materialDesign:TextFieldAssist.DecorationVisibility="Hidden" BorderThickness="0" Padding="0,0,0,0">
+            <RichTextBox.Resources>
+                <Style TargetType="{x:Type Paragraph}">
+                    <Setter Property="Margin" Value="0"/>
+                </Style>
+            </RichTextBox.Resources>
         </RichTextBox>
 
-        <GridSplitter Grid.Row="3" ShowsPreview="False" Height="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Gray"/>
+        <GridSplitter Grid.Row="3" ShowsPreview="False" Height="5" HorizontalAlignment="Stretch" Background="Gray"/>
 
-        <DataGrid Grid.Row="4" Margin="10" VerticalAlignment="Stretch" AutoGenerateColumns="False">
+        <DataGrid FontSize="15" Margin="5" Grid.Row="4" Background="White" AutoGenerateColumns="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Путь к файлу" />
                 <DataGridTextColumn Header="Строка"/>
@@ -136,5 +199,7 @@
                 <DataGridTextColumn Header="Сообщение"/>
             </DataGrid.Columns>
         </DataGrid>
+
+        <TextBlock Grid.Row="5" x:Name="CursorPositionTextBlock" FontSize="15" Text="Строка: 0, Столбец: 0" Margin="0 0 5 5" HorizontalAlignment="Right"/>
     </Grid>
 </Window>
