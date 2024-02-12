@@ -97,12 +97,12 @@
             </MenuItem>
             <MenuItem Header="Пуск"/>
             <MenuItem Header="Справка" ItemContainerStyle="{StaticResource MenuItemStyle}">
-                <MenuItem Header="Вызов справки">
+                <MenuItem Header="Вызов справки" Command="{Binding HelpCommand}">
                     <MenuItem.Icon>
                         <materialDesign:PackIcon Kind="QuestionMarkCircleOutline"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="О программе">
+                <MenuItem Header="О программе" Command="{Binding AboutCommand}">
                     <MenuItem.Icon>
                         <materialDesign:PackIcon Kind="AboutCircleOutline"/>
                     </MenuItem.Icon>
@@ -168,13 +168,13 @@
                     <materialDesign:PackIcon Kind="PlayArrow" />
                 </Button>
                 <Separator/>
-                <Button Padding="5">
+                <Button Padding="5" Command="{Binding HelpCommand}">
                     <Button.ToolTip>
                         <ToolTip Content="Вызов справки" />
                     </Button.ToolTip>
                     <materialDesign:PackIcon Kind="QuestionMarkCircleOutline" />
                 </Button>
-                <Button Padding="5">
+                <Button Padding="5" Command="{Binding AboutCommand}">
                     <Button.ToolTip>
                         <ToolTip Content="О программе" />
                     </Button.ToolTip>

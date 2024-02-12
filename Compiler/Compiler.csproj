@@ -21,4 +21,16 @@
     <Resource Include="Resources\logo.ico" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Resources\About.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Help.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\logo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

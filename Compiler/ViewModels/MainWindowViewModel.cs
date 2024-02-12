@@ -11,6 +11,8 @@ namespace Compiler;
 public class MainWindowViewModel : ViewModelBase
 {
     private FileManager _fileManager;
+    private const string _aboutPath = @"Resources\About.html";
+    private const string _helpPath = @"Resources\Help.html";
     private string _currentFilePath;
     private string _fileContent;
     private bool _isFileModified;
@@ -19,6 +21,8 @@ public class MainWindowViewModel : ViewModelBase
     private RelayCommand _openFileCommand;
     private RelayCommand _saveFileCommand;
     private RelayCommand _saveAsFileCommand;
+    private RelayCommand _aboutCommand;
+    private RelayCommand _helpCommand;
     private RelayCommand _exitCommand;
 
     public event EventHandler<StringEventArgs> StringSent;
@@ -30,7 +34,6 @@ public class MainWindowViewModel : ViewModelBase
         {
             _fileContent = value;
             IsFileModified = true;
-            Console.WriteLine(_fileContent);
             OnPropertyChanged(nameof(FileContent));
         }
     }
@@ -80,6 +83,16 @@ public class MainWindowViewModel : ViewModelBase
     public RelayCommand SaveAsFileCommand
     {
         get => _saveAsFileCommand ??= new RelayCommand(SaveAsFile);
+    }
+    
+    public RelayCommand AboutCommand
+    {
+        get => _aboutCommand ??= new RelayCommand(_ => HtmlHelper.OpenInBrowser(_aboutPath));
+    }
+    
+    public RelayCommand HelpCommand
+    {
+        get => _helpCommand ??= new RelayCommand(_ => HtmlHelper.OpenInBrowser(_helpPath));
     }
 
     public void CreateNewFile(object obj)
