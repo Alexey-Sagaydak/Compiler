@@ -19,97 +19,96 @@ namespace Compiler
         public MainWindow()
         {
             InitializeComponent();
+            MainWindowViewModel vm = new MainWindowViewModel();
+            DataContext = vm;
+            vm.StringSent += OnStringReceived;
+        }
+
+        public void OnStringReceived(object sender, StringEventArgs e)
+        {
+            Console.WriteLine("\n\n######");
+            Console.WriteLine(e.Message);
+            Console.WriteLine("\n\n######");
+            textEditor.Document.Text = e.Message;
         }
 
         private void CutSelectedText(object sender, RoutedEventArgs e)
         {
-            TextRange selectedTextRange = MyRichTextBox.Selection;
-
-            if (selectedTextRange != null && !string.IsNullOrEmpty(selectedTextRange.Text))
+            if (textEditor.SelectionLength > 0)
             {
-                Clipboard.SetText(selectedTextRange.Text);
-                selectedTextRange.Text = string.Empty;
+                Clipboard.SetText(textEditor.SelectedText);
+                textEditor.Document.Remove(textEditor.SelectionStart, textEditor.SelectionLength);
             }
         }
 
         private void CopySelectedText(object sender, RoutedEventArgs e)
         {
-            TextRange selectedTextRange = MyRichTextBox.Selection;
-
-            if (selectedTextRange != null && !string.IsNullOrEmpty(selectedTextRange.Text))
+            if (textEditor.SelectionLength > 0)
             {
-                Clipboard.SetText(selectedTextRange.Text);
+                Clipboard.SetText(textEditor.SelectedText);
             }
         }
 
         private void PasteText(object sender, RoutedEventArgs e)
         {
-            TextRange selection = MyRichTextBox.Selection;
-
-            if (selection != null && Clipboard.ContainsText())
+            if (Clipboard.ContainsText())
             {
-                selection.Text = Clipboard.GetText();
+                textEditor.Document.Insert(textEditor.CaretOffset, Clipboard.GetText());
             }
         }
 
         private void DeleteSelectedText(object sender, RoutedEventArgs e)
         {
-            TextRange selection = MyRichTextBox.Selection;
-
-            if (selection != null && !selection.IsEmpty)
+            if (textEditor.SelectionLength > 0)
             {
-                selection.Text = string.Empty;
+                textEditor.Document.Remove(textEditor.SelectionStart, textEditor.SelectionLength);
             }
         }
 
         private void SelectAllText(object sender, RoutedEventArgs e)
         {
-            TextRange textRange = new TextRange(MyRichTextBox.Document.ContentStart, MyRichTextBox.Document.ContentEnd);
-            MyRichTextBox.Selection.Select(textRange.Start, textRange.End);
+            textEditor.SelectAll();
         }
 
         private void MyRichTextBox_SelectionChanged(object sender, RoutedEventArgs e)
         {
-            TextPointer caretPosition = MyRichTextBox.CaretPosition;
+            int lineNumber = textEditor.CaretOffset = 0;
+            //int lineNumber = textEditor.TextArea.Document.GetLineByOffset(textEditor.CaretOffset).LineNumber + 1;
+            int columnNumber = textEditor.CaretOffset - textEditor.TextArea.Document.GetLineByOffset(textEditor.CaretOffset).Offset + 1;
+            CursorPositionTextBlock.Text = $"Строка: {lineNumber}, Столбец: {columnNumber}";
+        }
 
-            if (caretPosition != null)
+        private void Window_DragEnter(object sender, DragEventArgs e)
+        {
+            // Проверяем, что файлы действительно перетаскиваются
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
-                CursorPositionTextBlock.Text = $"Строка: {GetLineNumber(MyRichTextBox)}, Столбец: {GetColumnNumber(MyRichTextBox)}";
+                // Разрешаем копирование файлов
+                e.Effects = DragDropEffects.Copy;
+            }
+            else
+            {
+                // Запрещаем перетаскивание
+                e.Effects = DragDropEffects.None;
             }
         }
 
-        private int GetColumnNumber(RichTextBox richTextBox)
+        private void Window_Drop(object sender, DragEventArgs e)
         {
-            return Math.Max(
-                new TextRange(
-                    richTextBox.CaretPosition.GetLineStartPosition(0),
-                    richTextBox.CaretPosition).Text.Length + 1, 1);
+            // Получаем список путей к перетаскиваемым файлам
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+            // Если есть хотя бы один файл
+            if (files != null && files.Length > 0)
+            {
+                // Передаем путь к файлу в свойство вашего ViewModel
+                (DataContext as MainWindowViewModel)?.HandleDroppedFiles(files);
+            }
         }
 
-        private int GetLineNumber(RichTextBox richTextBox)
+        private void Exit(object sender, RoutedEventArgs e)
         {
-            TextPointer caretLineStart = richTextBox.CaretPosition.GetLineStartPosition(0);
-            TextPointer p = richTextBox.Document.ContentStart.GetLineStartPosition(0);
-            int currentLineNumber = 0;
-
-            while (true)
-            {
-                if (p == null || (caretLineStart != null && caretLineStart.CompareTo(p) < 0))
-                {
-                    break;
-                }
-
-                p = p.GetLineStartPosition(1, out var result);
-
-                if (result == 0)
-                {
-                    break;
-                }
-
-                currentLineNumber++;
-            }
-
-            return Math.Max(1, currentLineNumber);
+            Close();
         }
     }
 }

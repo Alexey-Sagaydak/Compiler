@@ -3,10 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
         xmlns:local="clr-namespace:Compiler"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        mc:Ignorable="d"
-        Title="Компилятор" Height="600" Width="1000" MinHeight="300" MinWidth="400" Icon="../Resources/logo.ico">
+        mc:Ignorable="d" DragEnter="Window_DragEnter" Drop="Window_Drop"
+        Title="Компилятор - Новый файл" Height="600" Width="1000" MinHeight="300" MinWidth="400" Icon="../Resources/logo.ico">
 
     <Grid Background="WhiteSmoke">
         <Grid.RowDefinitions>
@@ -20,27 +22,27 @@
 
         <Menu Grid.Row="0" FontSize="15" Background="WhiteSmoke" ItemContainerStyle="{StaticResource MenuItemStyle}">
             <MenuItem Header="Файл" ItemContainerStyle="{StaticResource MenuItemStyle}">
-                <MenuItem Header="Создать">
+                <MenuItem Header="Создать" Command="{Binding CreateNewFileCommand}">
                     <MenuItem.Icon>
                         <materialDesign:PackIcon Kind="FileOutline"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Открыть">
+                <MenuItem Header="Открыть" Command="{Binding OpenFileCommand}">
                     <MenuItem.Icon>
                         <materialDesign:PackIcon Kind="FolderOpenOutline"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Сохранить">
+                <MenuItem Header="Сохранить" Command="{Binding SaveFileCommand}">
                     <MenuItem.Icon>
                         <materialDesign:PackIcon Kind="ContentSaveOutline"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Сохранить как">
+                <MenuItem Header="Сохранить как" Command="{Binding SaveAsFileCommand}">
                     <MenuItem.Icon>
                         <materialDesign:PackIcon Kind="ContentSaveAddOutline"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Выход">
+                <MenuItem Header="Выход" Click="Exit">
                     <MenuItem.Icon>
                         <materialDesign:PackIcon Kind="ExitToApp"/>
                     </MenuItem.Icon>
@@ -110,19 +112,19 @@
 
         <ToolBarTray Grid.Row="1">
             <ToolBar>
-                <Button Padding="5">
+                <Button Padding="5" Command="{Binding CreateNewFileCommand}">
                     <Button.ToolTip>
                         <ToolTip Content="Создать" />
                     </Button.ToolTip>
                     <materialDesign:PackIcon Kind="FileOutline" />
                 </Button>
-                <Button Padding="5">
+                <Button Padding="5" Command="{Binding OpenFileCommand}">
                     <Button.ToolTip>
                         <ToolTip Content="Открыть" />
                     </Button.ToolTip>
                     <materialDesign:PackIcon Kind="FolderOpenOutline" />
                 </Button>
-                <Button Padding="5">
+                <Button Padding="5" Command="{Binding SaveFileCommand}">
                     <Button.ToolTip>
                         <ToolTip Content="Сохранить" />
                     </Button.ToolTip>
@@ -181,14 +183,14 @@
             </ToolBar>
         </ToolBarTray>
 
-        <RichTextBox Grid.Row="2" x:Name="MyRichTextBox" Margin="5" SelectionChanged="MyRichTextBox_SelectionChanged" Background="White" FontSize="15" VerticalScrollBarVisibility="Auto" materialDesign:TextFieldAssist.DecorationVisibility="Hidden" BorderThickness="0" Padding="0,0,0,0">
-            <RichTextBox.Resources>
-                <Style TargetType="{x:Type Paragraph}">
-                    <Setter Property="Margin" Value="0"/>
-                </Style>
-            </RichTextBox.Resources>
-        </RichTextBox>
-
+        <avalonedit:TextEditor Grid.Row="2" Name="textEditor" Margin="5" Background="White" FontSize="15"
+                               VerticalScrollBarVisibility="Auto" BorderThickness="0" Padding="0,0,0,0"
+                               SyntaxHighlighting="C#" ShowLineNumbers="True">
+            <i:Interaction.Behaviors>
+                <local:AvalonEditBehaviour InputText="{Binding FileContent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            </i:Interaction.Behaviors>
+        </avalonedit:TextEditor>
+        
         <GridSplitter Grid.Row="3" ShowsPreview="False" Height="5" HorizontalAlignment="Stretch" Background="Gray"/>
 
         <DataGrid FontSize="15" Margin="5" Grid.Row="4" Background="White" AutoGenerateColumns="False">
