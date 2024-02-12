@@ -1,10 +1,5 @@
 ﻿using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Documents;
+using System.Windows;
 
 namespace Compiler;
 
@@ -61,13 +56,14 @@ public class MainWindowViewModel : ViewModelBase
     public MainWindowViewModel()
     {
         _fileManager = new FileManager();
-        FileContent = string.Empty;
+        _fileContent = string.Empty;
+        CurrentFilePath = string.Empty;
         IsFileModified = false;
     }
 
     public RelayCommand CreateNewFileCommand
     {
-        get => _createNewFileCommand ??= new RelayCommand(CreateNewFile, _ => !_isFileModified);
+        get => _createNewFileCommand ??= new RelayCommand(CreateNewFile);
     }
 
     public RelayCommand OpenFileCommand
@@ -77,7 +73,7 @@ public class MainWindowViewModel : ViewModelBase
 
     public RelayCommand SaveFileCommand
     {
-        get => _saveFileCommand ??= new RelayCommand(SaveFile);
+        get => _saveFileCommand ??= new RelayCommand(SaveFile, _ => _isFileModified || CurrentFilePath == string.Empty);
     }
 
     public RelayCommand SaveAsFileCommand
@@ -97,12 +93,20 @@ public class MainWindowViewModel : ViewModelBase
 
     public void CreateNewFile(object obj)
     {
+        if (CancelOperationAfterCheckingForUnsavedChanges())
+            return;
+
         FileContent = string.Empty;
+        SendString(_fileContent);
+        CurrentFilePath = string.Empty;
         IsFileModified = true;
     }
 
     public void OpenFile(object obj)
     {
+        if (CancelOperationAfterCheckingForUnsavedChanges())
+            return;
+
         OpenFileDialog openFileDialog = new OpenFileDialog();
         if (openFileDialog.ShowDialog() == true)
         {
@@ -111,10 +115,10 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
-    public void SaveAsFile(object obj)
+    public void SaveAsFile(object obj = null)
     {
         SaveFileDialog saveFileDialog = new SaveFileDialog();
-        saveFileDialog.Filter = "Текстовый файл (*.txt)|*.txt|C# файл (*.cs)|*.cs|C файл (*.c)|*.c|C++ файл (*.cpp)|*.cpp|Все файлы (*.*)|*.*";
+        saveFileDialog.Filter = "Текстовый файл (*.txt)|*.txt|C# файл (*.cs)|*.cs|C файл (*.c)|*.c|C++ файл (*.cpp)|*.cpp|Python файл (*.py)|*.py|JavaScript файл (*.js)|*.js|HTML файл (*.html)|*.html|CSS файл (*.css)|*.css|XML файл (*.xml)|*.xml|JSON файл (*.json)|*.json|Markdown файл (*.md)|*.md|PHP файл (*.php)|*.php|Java файл (*.java)|*.java|Все файлы (*.*)|*.*";
 
         if (saveFileDialog.ShowDialog() == true)
         {
@@ -124,11 +128,11 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
-    public void SaveFile(object obj)
+    public void SaveFile(object obj = null)
     {
         if (string.IsNullOrEmpty(_currentFilePath))
         {
-            SaveAsFile(null);
+            SaveAsFile();
         }
         else
         {
@@ -148,13 +152,35 @@ public class MainWindowViewModel : ViewModelBase
     public void ReadFileContent()
     {
         FileContent = _fileManager.OpenFile(_currentFilePath);
-        IsFileModified = false;
         SendString(_fileContent);
+        IsFileModified = false;
     }
 
     public void HandleDroppedFiles(string[] files)
     {
+        if (CancelOperationAfterCheckingForUnsavedChanges())
+            return;
+
         CurrentFilePath = files[0];
         ReadFileContent();
+    }
+
+    public bool CancelOperationAfterCheckingForUnsavedChanges()
+    {
+        if (_isFileModified)
+        {
+            var result = MessageBoxHelper.ShowUnsavedChangesMessage();
+
+            switch (result)
+            {
+                case MessageBoxResult.Yes:
+                    SaveFile();
+                    return false;
+                case MessageBoxResult.Cancel:
+                    return true;
+            }
+        }
+
+        return false;
     }
 }
