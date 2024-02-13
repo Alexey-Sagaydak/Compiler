@@ -21,7 +21,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <Menu Grid.Row="0" FontSize="15" Background="WhiteSmoke" ItemContainerStyle="{StaticResource MenuItemStyle}">
+        <Menu Grid.Row="0" FontSize="16" Background="WhiteSmoke" ItemContainerStyle="{StaticResource MenuItemStyle}">
             <MenuItem Header="Файл" ItemContainerStyle="{StaticResource MenuItemStyle}">
                 <MenuItem Header="Создать" Command="{Binding CreateNewFileCommand}">
                     <MenuItem.Icon>
@@ -132,6 +132,24 @@
                     <materialDesign:PackIcon Kind="ContentSaveOutline" />
                 </Button>
                 <Separator/>
+                <ComboBox x:Name="fontSizeComboBox" Width="60" SelectedIndex="6" IsEditable="True" IsReadOnly="False" StaysOpenOnEdit="True" SelectionChanged="fontSizeComboBox_SelectionChanged" >
+                    <ComboBoxItem Content="8" />
+                    <ComboBoxItem Content="9" />
+                    <ComboBoxItem Content="10" />
+                    <ComboBoxItem Content="11" />
+                    <ComboBoxItem Content="12" />
+                    <ComboBoxItem Content="14" />
+                    <ComboBoxItem Content="16" />
+                    <ComboBoxItem Content="18" />
+                    <ComboBoxItem Content="20" />
+                    <ComboBoxItem Content="22" />
+                    <ComboBoxItem Content="24" />
+                    <ComboBoxItem Content="26" />
+                    <ComboBoxItem Content="28" />
+                    <ComboBoxItem Content="36" />
+                    <ComboBoxItem Content="48" />
+                    <ComboBoxItem Content="72" />
+                </ComboBox>
                 <Button x:Name="undoButton" Padding="5" Click="undoButton_Click" IsEnabled="False">
                     <Button.ToolTip>
                         <ToolTip Content="Отменить" />
@@ -184,7 +202,7 @@
             </ToolBar>
         </ToolBarTray>
 
-        <avalonedit:TextEditor Grid.Row="2" Name="textEditor" Margin="5" Background="White" FontSize="15"
+        <avalonedit:TextEditor Grid.Row="2" Name="textEditor" Margin="5" Background="White" FontSize="16"
                                VerticalScrollBarVisibility="Auto" BorderThickness="0" Padding="0,0,0,0"
                                SyntaxHighlighting="C#" ShowLineNumbers="True" TextChanged="textEditor_TextChanged"
                                PreviewKeyDown="textEditor_PreviewKeyDown" MouseMove="textEditor_MouseMove">
@@ -195,7 +213,7 @@
         
         <GridSplitter Grid.Row="3" ShowsPreview="False" Height="5" HorizontalAlignment="Stretch" Background="Gray"/>
 
-        <DataGrid FontSize="15" Margin="5" Grid.Row="4" Background="White" AutoGenerateColumns="False">
+        <DataGrid x:Name="dataGrid" FontSize="15" Margin="5" Grid.Row="4" Background="White" AutoGenerateColumns="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Путь к файлу" />
                 <DataGridTextColumn Header="Строка"/>
@@ -204,6 +222,6 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <TextBlock Grid.Row="5" x:Name="CursorPositionTextBlock" FontSize="15" Text="Строка: 1, Столбец: 1" Margin="0 0 5 5" HorizontalAlignment="Right"/>
+        <TextBlock Grid.Row="5" x:Name="CursorPositionTextBlock" FontSize="16" Text="Строка: 1, Столбец: 1" Margin="0 0 5 5" HorizontalAlignment="Right"/>
     </Grid>
 </Window>

@@ -135,5 +135,20 @@ namespace Compiler
         {
             textEditor.Redo();
         }
+
+        private void fontSizeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                try
+                {
+                    int fontSize = Convert.ToInt32(fontSizeComboBox.Text);
+                    textEditor.FontSize = fontSize;
+                    dataGrid.FontSize = fontSize;
+                    CursorPositionTextBlock.FontSize = fontSize;
+                }
+                catch { }
+            }));
+        }
     }
 }
