@@ -186,7 +186,8 @@
 
         <avalonedit:TextEditor Grid.Row="2" Name="textEditor" Margin="5" Background="White" FontSize="15"
                                VerticalScrollBarVisibility="Auto" BorderThickness="0" Padding="0,0,0,0"
-                               SyntaxHighlighting="C#" ShowLineNumbers="True">
+                               SyntaxHighlighting="C#" ShowLineNumbers="True" TextChanged="textEditor_TextChanged"
+                               PreviewKeyDown="textEditor_PreviewKeyDown" MouseMove="textEditor_MouseMove">
             <i:Interaction.Behaviors>
                 <local:AvalonEditBehaviour InputText="{Binding FileContent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             </i:Interaction.Behaviors>
@@ -203,6 +204,6 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <TextBlock Grid.Row="5" x:Name="CursorPositionTextBlock" FontSize="15" Text="Строка: 0, Столбец: 0" Margin="0 0 5 5" HorizontalAlignment="Right"/>
+        <TextBlock Grid.Row="5" x:Name="CursorPositionTextBlock" FontSize="15" Text="Строка: 1, Столбец: 1" Margin="0 0 5 5" HorizontalAlignment="Right"/>
     </Grid>
 </Window>

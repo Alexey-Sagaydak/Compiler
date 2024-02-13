@@ -101,5 +101,20 @@ namespace Compiler
             var location = textEditor.Document.GetLocation(offset);
             CursorPositionTextBlock.Text = $"Строка: {location.Line}, Столбец: {location.Column}";
         }
+
+        private void textEditor_TextChanged(object sender, EventArgs e)
+        {
+            GetCaretPosition();
+        }
+
+        private void textEditor_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            GetCaretPosition();
+        }
+
+        private void textEditor_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            GetCaretPosition();
+        }
     }
 }
