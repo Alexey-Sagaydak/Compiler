@@ -7,9 +7,10 @@
         xmlns:local="clr-namespace:Compiler"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:cmd="http://schemas.microsoft.com/winfx/2006/xaml/presentation/command"
         mc:Ignorable="d" DragEnter="Window_DragEnter" Drop="Window_Drop"
         Title="Компилятор - Новый файл" Height="600" Width="1000" MinHeight="300" MinWidth="400" Icon="../Resources/logo.ico">
-
+    
     <Grid Background="WhiteSmoke">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -42,7 +43,7 @@
                         <materialDesign:PackIcon Kind="ContentSaveAddOutline"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Выход" Click="Exit">
+                <MenuItem Header="Выход" Command="{Binding ExitCommand}">
                     <MenuItem.Icon>
                         <materialDesign:PackIcon Kind="ExitToApp"/>
                     </MenuItem.Icon>

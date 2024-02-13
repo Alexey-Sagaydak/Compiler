@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using System.ComponentModel;
 using System.Windows;
 
 namespace Compiler;
@@ -21,6 +22,7 @@ public class MainWindowViewModel : ViewModelBase
     private RelayCommand _exitCommand;
 
     public event EventHandler<StringEventArgs> StringSent;
+    public event EventHandler RequestClose;
 
     public string FileContent
     {
@@ -89,6 +91,19 @@ public class MainWindowViewModel : ViewModelBase
     public RelayCommand HelpCommand
     {
         get => _helpCommand ??= new RelayCommand(_ => HtmlHelper.OpenInBrowser(_helpPath));
+    }
+
+    public RelayCommand ExitCommand
+    {
+        get => _exitCommand ??= new RelayCommand(Exit);
+    }
+
+    public void Exit(object obj = null)
+    {
+        if (CancelOperationAfterCheckingForUnsavedChanges())
+            return;
+
+        OnRequestClose();
     }
 
     public void CreateNewFile(object obj)
@@ -182,5 +197,10 @@ public class MainWindowViewModel : ViewModelBase
         }
 
         return false;
+    }
+
+    private void OnRequestClose()
+    {
+        RequestClose?.Invoke(this, EventArgs.Empty);
     }
 }

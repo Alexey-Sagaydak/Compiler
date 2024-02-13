@@ -10,9 +10,24 @@ namespace Compiler
         public MainWindow()
         {
             InitializeComponent();
-            MainWindowViewModel vm = new MainWindowViewModel();
-            DataContext = vm;
-            vm.StringSent += OnStringReceived;
+
+            MainWindowViewModel viewModel = new MainWindowViewModel();
+            viewModel.StringSent += OnStringReceived;
+            viewModel.RequestClose += (sender, e) => Close();
+            Closing += MainWindow_Closing;
+
+            DataContext = viewModel;
+        }
+
+        private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (((MainWindowViewModel)DataContext).IsFileModified)
+            {
+                if (MessageBoxHelper.ShowWindowClosingMessage() == MessageBoxResult.No)
+                {
+                    e.Cancel = true;
+                }
+            }
         }
 
         public void OnStringReceived(object sender, StringEventArgs e)
@@ -58,14 +73,6 @@ namespace Compiler
             textEditor.SelectAll();
         }
 
-        private void MyRichTextBox_SelectionChanged(object sender, RoutedEventArgs e)
-        {
-            int lineNumber = textEditor.CaretOffset = 0;
-            //int lineNumber = textEditor.TextArea.Document.GetLineByOffset(textEditor.CaretOffset).LineNumber + 1;
-            int columnNumber = textEditor.CaretOffset - textEditor.TextArea.Document.GetLineByOffset(textEditor.CaretOffset).Offset + 1;
-            CursorPositionTextBlock.Text = $"Строка: {lineNumber}, Столбец: {columnNumber}";
-        }
-
         private void Window_DragEnter(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
@@ -88,9 +95,11 @@ namespace Compiler
             }
         }
 
-        private void Exit(object sender, RoutedEventArgs e)
+        private void GetCaretPosition()
         {
-            Close();
+            int offset = textEditor.CaretOffset;
+            var location = textEditor.Document.GetLocation(offset);
+            CursorPositionTextBlock.Text = $"Строка: {location.Line}, Столбец: {location.Column}";
         }
     }
 }
