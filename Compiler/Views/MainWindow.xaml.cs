@@ -1,4 +1,7 @@
 ﻿using System.Windows;
+using System.Windows.Media;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace Compiler
 {
@@ -104,6 +107,12 @@ namespace Compiler
 
         private void textEditor_TextChanged(object sender, EventArgs e)
         {
+            undoButton.IsEnabled = textEditor.CanUndo;
+            redoButton.IsEnabled = textEditor.CanRedo;
+
+            undoMenuItem.IsEnabled = textEditor.CanUndo;
+            redoMenuItem.IsEnabled = textEditor.CanRedo;
+
             GetCaretPosition();
         }
 
@@ -115,6 +124,16 @@ namespace Compiler
         private void textEditor_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
             GetCaretPosition();
+        }
+
+        private void undoButton_Click(object sender, RoutedEventArgs e)
+        {
+            textEditor.Undo();
+        }
+
+        private void redoButton_Click(object sender, RoutedEventArgs e)
+        {
+            textEditor.Redo();
         }
     }
 }

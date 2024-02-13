@@ -50,12 +50,12 @@
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="Правка" ItemContainerStyle="{StaticResource MenuItemStyle}">
-                <MenuItem Header="Отменить">
+                <MenuItem x:Name="undoMenuItem" Header="Отменить" Click="undoButton_Click" IsEnabled="False">
                     <MenuItem.Icon>
                         <materialDesign:PackIcon Kind="ArrowBack"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Повторить">
+                <MenuItem x:Name="redoMenuItem" Header="Повторить" Click="redoButton_Click" IsEnabled="False">
                     <MenuItem.Icon>
                         <materialDesign:PackIcon Kind="ArrowForward"/>
                     </MenuItem.Icon>
@@ -132,13 +132,13 @@
                     <materialDesign:PackIcon Kind="ContentSaveOutline" />
                 </Button>
                 <Separator/>
-                <Button Padding="5">
+                <Button x:Name="undoButton" Padding="5" Click="undoButton_Click" IsEnabled="False">
                     <Button.ToolTip>
                         <ToolTip Content="Отменить" />
                     </Button.ToolTip>
                     <materialDesign:PackIcon Kind="ArrowBack" />
                 </Button>
-                <Button Padding="5">
+                <Button x:Name="redoButton" Padding="5" Click="redoButton_Click" IsEnabled="False">
                     <Button.ToolTip>
                         <ToolTip Content="Повторить" />
                     </Button.ToolTip>
