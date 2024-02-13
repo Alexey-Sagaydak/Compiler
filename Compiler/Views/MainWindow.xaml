@@ -9,8 +9,8 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:cmd="http://schemas.microsoft.com/winfx/2006/xaml/presentation/command"
         mc:Ignorable="d" DragEnter="Window_DragEnter" Drop="Window_Drop"
-        Title="Компилятор - Новый файл" Height="600" Width="1000" MinHeight="300" MinWidth="400" Icon="../Resources/logo.ico">
-    
+        Title="{Binding WindowTitle}" Height="600" Width="1000" MinHeight="300" MinWidth="400" Icon="../Resources/logo.ico">
+
     <Grid Background="WhiteSmoke">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>

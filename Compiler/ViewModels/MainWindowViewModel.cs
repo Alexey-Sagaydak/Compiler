@@ -42,6 +42,7 @@ public class MainWindowViewModel : ViewModelBase
         {
             _isFileModified = value;
             OnPropertyChanged(nameof(IsFileModified));
+            OnPropertyChanged(nameof(WindowTitle));
         }
     }
 
@@ -52,7 +53,13 @@ public class MainWindowViewModel : ViewModelBase
         {
             _currentFilePath = value;
             OnPropertyChanged(nameof(CurrentFilePath));
+            OnPropertyChanged(nameof(WindowTitle));
         }
+    }
+
+    public string WindowTitle
+    {
+        get => $"Компилятор — {((CurrentFilePath == string.Empty) ? "Новый файл.txt" : "")}{_currentFilePath.Split(@"\").Last()}{(IsFileModified ? "*" : "")} {((CurrentFilePath != string.Empty) ? "(" : "")}{_currentFilePath}{((CurrentFilePath != string.Empty) ? ")" : "")}";
     }
 
     public MainWindowViewModel()
