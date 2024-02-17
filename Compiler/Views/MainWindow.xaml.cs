@@ -1,7 +1,11 @@
 ﻿using System.Windows;
 using System.Windows.Media;
+using System.Xml;
 using System.Windows.Controls;
 using System.Windows.Input;
+using ICSharpCode.AvalonEdit.Highlighting.Xshd;
+using ICSharpCode.AvalonEdit.Highlighting;
+using System.IO;
 
 namespace Compiler
 {
@@ -16,10 +20,22 @@ namespace Compiler
 
             MainWindowViewModel viewModel = new MainWindowViewModel();
             viewModel.StringSent += OnStringReceived;
+            viewModel.LexemeSent += OnLexemeReceived;
             viewModel.RequestClose += (sender, e) => Close();
             Closing += MainWindow_Closing;
 
             DataContext = viewModel;
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            using (StreamReader s = new StreamReader(@"Resources\SQL.xshd"))
+            {
+                using (XmlTextReader reader = new XmlTextReader(s))
+                {
+                    textEditor.SyntaxHighlighting = HighlightingLoader.Load(reader, HighlightingManager.Instance);
+                }
+            }
         }
 
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -36,6 +52,14 @@ namespace Compiler
         public void OnStringReceived(object sender, StringEventArgs e)
         {
             textEditor.Document.Text = e.Message;
+        }
+
+        public void OnLexemeReceived(object sender, Lexeme e)
+        {
+            if (e != null && e.EndIndex <= textEditor.Document.Text.Length)
+            {
+                textEditor.Select(e.StartIndex - 1, e.EndIndex - e.StartIndex + 1);
+            }
         }
 
         private void CutSelectedText(object sender, RoutedEventArgs e)
@@ -144,7 +168,8 @@ namespace Compiler
                 {
                     int fontSize = Convert.ToInt32(fontSizeComboBox.Text);
                     textEditor.FontSize = fontSize;
-                    dataGrid.FontSize = fontSize;
+                    parserDataGrid.FontSize = fontSize;
+                    lexerDataGrid.FontSize = fontSize;
                     CursorPositionTextBlock.FontSize = fontSize;
                 }
                 catch { }

@@ -9,8 +9,12 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:cmd="http://schemas.microsoft.com/winfx/2006/xaml/presentation/command"
         mc:Ignorable="d" DragEnter="Window_DragEnter" Drop="Window_Drop"
-        Title="{Binding WindowTitle}" Height="600" Width="1000" MinHeight="300" MinWidth="400" Icon="../Resources/logo.ico">
+        Title="{Binding WindowTitle}" Height="700" Width="1100" MinHeight="300" MinWidth="400" Icon="../Resources/logo.ico" Loaded="Window_Loaded">
 
+    <Window.Resources>
+        <local:IncrementConverter x:Key="IncrementConverter" />
+    </Window.Resources>
+    
     <Grid Background="WhiteSmoke">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -92,11 +96,11 @@
                 <MenuItem Header="Классификация грамматики"/>
                 <MenuItem Header="Метод анализа"/>
                 <MenuItem Header="Диагностика и нейтрализация ошибок"/>
-                <MenuItem Header="Тестовый пример"/>
+                <MenuItem Header="Тестовый пример" Command="{Binding OpenTestCaseCommand}"/>
                 <MenuItem Header="Список литературы"/>
                 <MenuItem Header="Исходный код программы"/>
             </MenuItem>
-            <MenuItem Header="Пуск"/>
+            <MenuItem Header="Пуск" Command="{Binding StartAnalyzersCommand}"/>
             <MenuItem Header="Справка" ItemContainerStyle="{StaticResource MenuItemStyle}">
                 <MenuItem Header="Вызов справки" Command="{Binding HelpCommand}">
                     <MenuItem.Icon>
@@ -132,7 +136,7 @@
                     <materialDesign:PackIcon Kind="ContentSaveOutline" />
                 </Button>
                 <Separator/>
-                <ComboBox x:Name="fontSizeComboBox" Width="60" SelectedIndex="6" IsEditable="True" IsReadOnly="False" StaysOpenOnEdit="True" SelectionChanged="fontSizeComboBox_SelectionChanged" >
+                <ComboBox x:Name="fontSizeComboBox" Width="60" SelectedIndex="6" IsEditable="True" IsReadOnly="False" StaysOpenOnEdit="True" SelectionChanged="fontSizeComboBox_SelectionChanged" Background="#00000000" >
                     <ComboBoxItem Content="8" />
                     <ComboBoxItem Content="9" />
                     <ComboBoxItem Content="10" />
@@ -180,7 +184,7 @@
                     </Button.ToolTip>
                     <materialDesign:PackIcon Kind="ContentPaste" />
                 </Button>
-                <Button Padding="5">
+                <Button Padding="5" Command="{Binding StartAnalyzersCommand}">
                     <Button.ToolTip>
                         <ToolTip Content="Пуск" />
                     </Button.ToolTip>
@@ -210,17 +214,48 @@
                 <local:AvalonEditBehaviour InputText="{Binding FileContent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             </i:Interaction.Behaviors>
         </avalonedit:TextEditor>
-        
+
         <GridSplitter Grid.Row="3" ShowsPreview="False" Height="5" HorizontalAlignment="Stretch" Background="Gray"/>
 
-        <DataGrid x:Name="dataGrid" FontSize="15" Margin="5" Grid.Row="4" Background="White" AutoGenerateColumns="False">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Путь к файлу" />
-                <DataGridTextColumn Header="Строка"/>
-                <DataGridTextColumn Header="Колонка"/>
-                <DataGridTextColumn Header="Сообщение"/>
-            </DataGrid.Columns>
-        </DataGrid>
+        <TabControl Grid.Row="4" Style="{StaticResource MaterialDesignNavigationRailTabControl}">
+            <TabItem Header="Парсер" ToolTip="Синтаксический анализатор" VerticalAlignment="Stretch">
+                <ScrollViewer VerticalScrollBarVisibility="Visible">
+                    <DataGrid x:Name="parserDataGrid" FontSize="16" Margin="5" GridLinesVisibility="All" Background="White" AutoGenerateColumns="False" BorderBrush="WhiteSmoke">
+                        <DataGrid.Resources>
+                            <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="Background" Value="WhiteSmoke" />
+                                <Setter Property="FontWeight" Value="Bold" />
+                            </Style>
+                        </DataGrid.Resources>
+                        
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Путь к файлу" />
+                            <DataGridTextColumn Header="Строка"/>
+                            <DataGridTextColumn Header="Колонка"/>
+                            <DataGridTextColumn Header="Сообщение"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Header="Сканер" ToolTip="Лексический анализатор" VerticalAlignment="Stretch">
+                <DataGrid x:Name="lexerDataGrid" FontSize="16" EnableRowVirtualization="False" Margin="5" SelectedItem="{Binding SelectedLexeme}" ItemsSource="{Binding Lexemes, Mode=OneWay}" AlternationCount="{Binding Lexemes.Count}" GridLinesVisibility="All" Background="White" AutoGenerateColumns="False" BorderBrush="WhiteSmoke">
+                    <DataGrid.Resources>
+                        <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                            <Setter Property="Background" Value="WhiteSmoke" />
+                            <Setter Property="FontWeight" Value="Bold" />
+                        </Style>
+                    </DataGrid.Resources>
+                    
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="№" Binding="{Binding AlternationIndex, RelativeSource={RelativeSource AncestorType=DataGridRow}, Converter={StaticResource IncrementConverter}}" FontWeight="SemiBold"/>
+                        <DataGridTextColumn Header="Условный код" Binding="{Binding LexemeId, Mode=OneWay}" DisplayIndex="1"/>
+                        <DataGridTextColumn Header="Тип лексемы" Binding="{Binding LexemeName, Mode=OneWay}" DisplayIndex="2"/>
+                        <DataGridTextColumn Header="Лексема" Binding="{Binding Value, Mode=OneWay}" DisplayIndex="3"/>
+                        <DataGridTextColumn Header="Местоположение" Binding="{Binding Position, Mode=OneWay}" DisplayIndex="4"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+        </TabControl>
 
         <TextBlock Grid.Row="5" x:Name="CursorPositionTextBlock" FontSize="16" Text="Строка: 1, Столбец: 1" Margin="0 0 5 5" HorizontalAlignment="Right"/>
     </Grid>

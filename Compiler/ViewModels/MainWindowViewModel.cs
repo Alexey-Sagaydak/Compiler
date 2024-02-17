@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using System.Collections.ObjectModel;
 using System.Windows;
 
 namespace Compiler;
@@ -6,8 +7,10 @@ namespace Compiler;
 public class MainWindowViewModel : ViewModelBase
 {
     private FileManager _fileManager;
+    private ILexicalAnalyzer _lexicalAnalyzer;
     private const string _aboutPath = @"Resources\About.html";
     private const string _helpPath = @"Resources\Help.html";
+    private const string _testCasePath = @"Resources\test_case.txt";
     private string _currentFilePath;
     private string _fileContent;
     private bool _isFileModified;
@@ -19,9 +22,36 @@ public class MainWindowViewModel : ViewModelBase
     private RelayCommand _aboutCommand;
     private RelayCommand _helpCommand;
     private RelayCommand _exitCommand;
+    private RelayCommand _openTestCaseCommand;
+    private RelayCommand _startAnalyzersCommand;
 
     public event EventHandler<StringEventArgs> StringSent;
+    public event EventHandler<Lexeme> LexemeSent;
+
+    private ObservableCollection<Lexeme> _lexemes;
+    private Lexeme _selectedLexeme;
+
     public event EventHandler RequestClose;
+
+    public ObservableCollection<Lexeme> Lexemes
+    {
+        get { return _lexemes; }
+        set
+        {
+            _lexemes = value;
+            OnPropertyChanged(nameof(Lexemes));
+        }
+    }
+    public Lexeme SelectedLexeme
+    {
+        get { return _selectedLexeme; }
+        set
+        {
+            _selectedLexeme = value;
+            LexemeSent(this, value);
+            OnPropertyChanged(nameof(SelectedLexeme));
+        }
+    }
 
     public string FileContent
     {
@@ -67,6 +97,7 @@ public class MainWindowViewModel : ViewModelBase
         _fileContent = string.Empty;
         CurrentFilePath = string.Empty;
         IsFileModified = false;
+        _lexicalAnalyzer = new LexicalAnalyzer();
     }
 
     public RelayCommand CreateNewFileCommand
@@ -99,9 +130,35 @@ public class MainWindowViewModel : ViewModelBase
         get => _helpCommand ??= new RelayCommand(_ => HtmlHelper.OpenInBrowser(_helpPath));
     }
 
+    public RelayCommand OpenTestCaseCommand
+    {
+        get => _openTestCaseCommand ??= new RelayCommand(OpenTestCase);
+    }
+
     public RelayCommand ExitCommand
     {
         get => _exitCommand ??= new RelayCommand(Exit);
+    }
+
+    public RelayCommand StartAnalyzersCommand
+    {
+        get => _startAnalyzersCommand ??= new RelayCommand(StartAnalysis);
+    }
+
+    public void OpenTestCase(object obj)
+    {
+        CurrentFilePath = _testCasePath;
+        ReadFileContent();
+    }
+
+    public void StartAnalysis(object obj)
+    {
+        LexicalAnalysis();
+    }
+
+    public void LexicalAnalysis()
+    {
+        Lexemes = new ObservableCollection<Lexeme>(_lexicalAnalyzer.Analyze(FileContent));
     }
 
     public void Exit(object obj = null)
@@ -123,7 +180,7 @@ public class MainWindowViewModel : ViewModelBase
         IsFileModified = true;
     }
 
-    public void OpenFile(object obj)
+    public void OpenFile(object obj = null)
     {
         if (CancelOperationAfterCheckingForUnsavedChanges())
             return;
