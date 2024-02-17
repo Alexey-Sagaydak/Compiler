@@ -105,6 +105,53 @@
 
 **Выходные данные:** последовательность условных кодов, описывающих структуру разбираемого текста с указанием места положения и типа.
 
+### Примеры допустимых строк
+
+```sql
+DECLARE
+product_price CONSTANT INTEGER = 150;
+```
+
+```sql
+DECLARE total_amount CONSTANT INTEGER := -150;
+```
+
+```sql
+DECLARE productPrice CONSTANT INTEGER := +150;
+```
+
+```sql
+DECLARE expense_1_amount CONSTANT INTEGER := -50;
+```
+
+```sql
+DECLARE product_price CONSTANT INTEGER := -150; DECLARE total_2 CONSTANT INTEGER := 50;
+```
+
+```sql
+DECLARE productPrice3 CONSTANT INTEGER := 150; DECLARE expense_amount_4 CONSTANT INTEGER := -50;
+```
+
+### Диаграмма состояний сканера
+
+![Диаграмма состояний сканера](/README_images/scanner_diagram.jpg)
+
+### Тестовые примеры
+
+1. **Тест №1.** Пример, показывающий все возможные лексемы, которые могут быть найдены лексическим анализатором.
+   
+   ![Тест 1](/README_images/scanner_test_3.png)
+3. **Тест №2.** Сложный пример.
+
+   > При нажатии на лексему в таблице, соответствующий фрагмент текста подсвечивается в поле редактирования.
+  
+   ![Тест 2](/README_images/scanner_test_1.png)
+6. **Тест №3.** Сложный пример.
+
+   > При нажатии на лексему в таблице, соответствующий фрагмент текста подсвечивается в поле редактирования.
+  
+   ![Тест 3](/README_images/scanner_test_2.png)
+
 ## Лабораторная работа №3: Разработка синтаксического анализатора (парсера)
 
 ## Лабораторная работа №4: Нейтрализация ошибок (метод Айронса)
