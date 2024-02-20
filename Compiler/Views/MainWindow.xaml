@@ -13,6 +13,8 @@
 
     <Window.Resources>
         <local:IncrementConverter x:Key="IncrementConverter" />
+        <local:CountToVisibilityVisibleConverter x:Key="CountToVisibilityVisibleConverter"/>
+        <local:CountToVisibilityHiddenConverter x:Key="CountToVisibilityHiddenConverter"/>
     </Window.Resources>
     
     <Grid Background="WhiteSmoke">
@@ -219,23 +221,20 @@
 
         <TabControl Grid.Row="4" Style="{StaticResource MaterialDesignNavigationRailTabControl}">
             <TabItem Header="Парсер" ToolTip="Синтаксический анализатор" VerticalAlignment="Stretch">
-                <ScrollViewer VerticalScrollBarVisibility="Visible">
-                    <DataGrid x:Name="parserDataGrid" FontSize="16" Margin="5" GridLinesVisibility="All" Background="White" AutoGenerateColumns="False" BorderBrush="WhiteSmoke">
-                        <DataGrid.Resources>
-                            <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
-                                <Setter Property="Background" Value="WhiteSmoke" />
-                                <Setter Property="FontWeight" Value="Bold" />
-                            </Style>
-                        </DataGrid.Resources>
-                        
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Путь к файлу" />
-                            <DataGridTextColumn Header="Строка"/>
-                            <DataGridTextColumn Header="Колонка"/>
-                            <DataGridTextColumn Header="Сообщение"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </ScrollViewer>
+                <DataGrid x:Name="parserDataGrid" FontSize="16" EnableRowVirtualization="False" Margin="5" ItemsSource="{Binding IncorrectLexemes, Mode=OneWay}" SelectedItem="{Binding SelectedLexeme}" AlternationCount="{Binding IncorrectLexemes.Count}" GridLinesVisibility="All" Background="White" AutoGenerateColumns="False" BorderBrush="WhiteSmoke">
+                    <DataGrid.Resources>
+                        <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                            <Setter Property="Background" Value="WhiteSmoke" />
+                            <Setter Property="FontWeight" Value="Bold" />
+                        </Style>
+                    </DataGrid.Resources>
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="№" Binding="{Binding AlternationIndex, RelativeSource={RelativeSource AncestorType=DataGridRow}, Converter={StaticResource IncrementConverter}}" FontWeight="SemiBold"/>
+                        <DataGridTextColumn Header="Местоположение" Binding="{Binding Position, Mode=OneWay}"/>
+                        <DataGridTextColumn Header="Сообщение" Binding="{Binding Message, Mode=OneWay}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
             </TabItem>
             <TabItem Header="Сканер" ToolTip="Лексический анализатор" VerticalAlignment="Stretch">
                 <DataGrid x:Name="lexerDataGrid" FontSize="16" EnableRowVirtualization="False" Margin="5" SelectedItem="{Binding SelectedLexeme}" ItemsSource="{Binding Lexemes, Mode=OneWay}" AlternationCount="{Binding Lexemes.Count}" GridLinesVisibility="All" Background="White" AutoGenerateColumns="False" BorderBrush="WhiteSmoke">
@@ -256,7 +255,17 @@
                 </DataGrid>
             </TabItem>
         </TabControl>
+        
+        <StackPanel x:Name="errorStackPanel" Grid.Row="5" Orientation="Horizontal" Visibility="{Binding IncorrectLexemes.Count, Converter={StaticResource CountToVisibilityVisibleConverter}}">
+            <materialDesign:PackIcon Kind="Error" Margin="5 0 0 0" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="#FFE03D48"/>
+            <TextBlock Text="{Binding IncorrectLexemes.Count}" Margin="5 0 5 0" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="16"/>
+        </StackPanel>
 
+        <StackPanel x:Name="goodStackPanel" Grid.Row="5" Orientation="Horizontal" Visibility="{Binding IncorrectLexemes.Count, Converter={StaticResource CountToVisibilityHiddenConverter}, ConverterParameter=Inverse}">
+            <materialDesign:PackIcon Kind="CheckCircle" Margin="5 0 0 0" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="#FF60C160"/>
+            <TextBlock Text="Проблемы не найдены" Margin="5 0 5 0" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="16"/>
+        </StackPanel>
+        
         <TextBlock Grid.Row="5" x:Name="CursorPositionTextBlock" FontSize="16" Text="Строка: 1, Столбец: 1" Margin="0 0 5 5" HorizontalAlignment="Right"/>
     </Grid>
 </Window>

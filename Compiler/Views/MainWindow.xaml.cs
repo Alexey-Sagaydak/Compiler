@@ -170,7 +170,6 @@ namespace Compiler
                     textEditor.FontSize = fontSize;
                     parserDataGrid.FontSize = fontSize;
                     lexerDataGrid.FontSize = fontSize;
-                    CursorPositionTextBlock.FontSize = fontSize;
                 }
                 catch { }
             }));

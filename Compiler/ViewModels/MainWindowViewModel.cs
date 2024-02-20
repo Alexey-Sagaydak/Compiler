@@ -6,6 +6,8 @@ namespace Compiler;
 
 public class MainWindowViewModel : ViewModelBase
 {
+    private IParser _parser;
+
     private FileManager _fileManager;
     private ILexicalAnalyzer _lexicalAnalyzer;
     private const string _aboutPath = @"Resources\About.html";
@@ -28,7 +30,9 @@ public class MainWindowViewModel : ViewModelBase
     public event EventHandler<StringEventArgs> StringSent;
     public event EventHandler<Lexeme> LexemeSent;
 
+    private List<Lexeme> _lexemesList;
     private ObservableCollection<Lexeme> _lexemes;
+    private ObservableCollection<Lexeme> _incorrectLexemes;
     private Lexeme _selectedLexeme;
 
     public event EventHandler RequestClose;
@@ -42,6 +46,17 @@ public class MainWindowViewModel : ViewModelBase
             OnPropertyChanged(nameof(Lexemes));
         }
     }
+
+    public ObservableCollection<Lexeme> IncorrectLexemes
+    {
+        get { return _incorrectLexemes; }
+        set
+        {
+            _incorrectLexemes = value;
+            OnPropertyChanged(nameof(IncorrectLexemes));
+        }
+    }
+
     public Lexeme SelectedLexeme
     {
         get { return _selectedLexeme; }
@@ -98,6 +113,9 @@ public class MainWindowViewModel : ViewModelBase
         CurrentFilePath = string.Empty;
         IsFileModified = false;
         _lexicalAnalyzer = new LexicalAnalyzer();
+        IncorrectLexemes = new ObservableCollection<Lexeme>();
+
+        _parser = new Parser();
     }
 
     public RelayCommand CreateNewFileCommand
@@ -154,11 +172,28 @@ public class MainWindowViewModel : ViewModelBase
     public void StartAnalysis(object obj)
     {
         LexicalAnalysis();
+        Parsing();
     }
 
     public void LexicalAnalysis()
     {
-        Lexemes = new ObservableCollection<Lexeme>(_lexicalAnalyzer.Analyze(FileContent));
+        _lexemesList = _lexicalAnalyzer.Analyze(FileContent);
+
+        Lexemes = new ObservableCollection<Lexeme>(_lexemesList);
+    }
+
+    public void Parsing()
+    {
+        List<Lexeme> cleanLexemes = new List<Lexeme>();
+        foreach (Lexeme lexeme in _lexemesList)
+        {
+            if (lexeme.Type != LexemeType.Whitespace && lexeme.Type != LexemeType.NewLine)
+            {
+                cleanLexemes.Add(lexeme);
+            }
+        }
+
+        IncorrectLexemes = new ObservableCollection<Lexeme>(_parser.Parse(cleanLexemes));
     }
 
     public void Exit(object obj = null)

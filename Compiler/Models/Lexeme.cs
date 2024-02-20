@@ -23,6 +23,9 @@ public enum LexemeType
 
 public class Lexeme
 {
+    private string[] lexemeNames;
+    private string message;
+    
     public int LexemeId { get => (int)Type; }
     public string LexemeName { get => lexemeNames[LexemeId - 1]; }
     public LexemeType Type { get; set; }
@@ -30,9 +33,11 @@ public class Lexeme
     public int StartIndex { get; set; }
     public int EndIndex { get; set; }
     public string Position { get => $"с {StartIndex} по {EndIndex} символы"; }
-
-    private string[] lexemeNames;
-
+    public string Message {
+        get => $"{message} (Отброшенный фрагмент: \"{Value}\")";
+        set => message = value;
+    }
+    
     public Lexeme(LexemeType type, string value, int startIndex, int endIndex)
     {
         Type = type;
