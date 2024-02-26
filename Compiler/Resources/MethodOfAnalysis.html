@@ -1,0 +1,71 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Метод анализа</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        p {
+            color: #555;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        code {
+            font-family: Consolas, monospace;
+            font-size: 16px;
+        }
+
+        ul, ol {
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+
+        li {
+            font-size: 18px;
+            color: #555;
+        }
+
+        .image-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>Метод анализа</h1>
+    <p>Методом анализа является алгоритм синтаксического анализа, основанный на графе автоматной грамматики.</p>
+    <p>Графы или диаграммы состояний представляют собой геометрическую интерпретацию синтаксического анализа слева направо. В отличие от синтаксических деревьев, графы или диаграммы состояний используются только для автоматных грамматик.</p>
+    <p><strong>Определение:</strong> Графом Γ(G[Z]) или диаграммой состояний называется совокупность узлов и направленных дуг, соединяющих узлы. Узлы графа соответствуют нетерминальным символам. Дуги графа направлены из одного узла в другой (или в тот же узел) таким образом, что из узла N дуга направляется в M и маркируется терминалом t, если в грамматике имеется правило вида: N → t M.</p>
+    <p><strong>Граф конечного автомата:</strong></p>
+    <div class="image-container">
+         <img src="finite_state_machine.jpg" alt="Diagram"> 
+    </div>
+</body>
+</html>

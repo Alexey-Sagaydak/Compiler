@@ -1,0 +1,92 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Постановка задачи</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        p {
+            color: #555;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        code {
+            font-family: Consolas, monospace;
+            font-size: 16px;
+        }
+
+        ul, ol {
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+
+        li {
+            font-size: 18px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Постановка задачи</h1>
+
+    <h2>Оглавление</h2>
+    <ul>
+        <li><a href="#тема-работы">Тема работы</a></li>
+        <li><a href="#особенности-языка">Особенности языка</a></li>
+        <li><a href="#примеры-верных-строк">Примеры верных строк из языка</a></li>
+    </ul>
+
+    <h2 id="тема-работы">Тема работы</h2>
+    <p>Разработка текстового редактора с функциями языкового процессора. Объявление и инициализация целочисленной константы в СУБД PostgreSQL.</p>
+
+    <h2 id="особенности-языка">Особенности языка</h2>
+    <p>Константы в языке SQL - это элементы данных, значения которых известны на этапе компиляции и не изменяются в процессе выполнения программы. Для описания констант используется оператор DECLARE с ключевым словом CONSTANT.</p>
+    <p>Формат записи для объявления целочисленной константы в SQL следующий:</p>
+
+    <pre><code class="language-sql">DECLARE имя_константы CONSTANT INTEGER := значение;</code></pre>
+
+    <h2 id="примеры-верных-строк">Примеры верных строк из языка</h2>
+
+    <p>В соответствии с разработанной автоматной грамматикой синтаксический анализатор (парсер) целочисленных констант будет считать верными следующие записи:</p>
+
+    <pre><code class="language-sql">DECLARE
+product_price CONSTANT INTEGER = 150;
+expense_1_amount CONSTANT INTEGER := -50;</code></pre>
+
+    <pre><code class="language-sql">DECLARE total_amount CONSTANT INTEGER := -150;</code></pre>
+
+    <pre><code class="language-sql">DECLARE productPrice CONSTANT INTEGER := +150;</code></pre>
+
+    <pre><code class="language-sql">DECLARE expense_1_amount CONSTANT INTEGER := -50;</code></pre>
+
+    <pre><code class="language-sql">DECLARE product_price CONSTANT INTEGER := -150; DECLARE total_2 CONSTANT INTEGER := 50;</code></pre>
+
+    <pre><code class="language-sql">DECLARE productPrice3 CONSTANT INTEGER := 150; DECLARE expense_amount_4 CONSTANT INTEGER := -50;</code></pre>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-sql.min.js"></script>
+
+</body>
+</html>

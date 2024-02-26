@@ -10,9 +10,18 @@ public class MainWindowViewModel : ViewModelBase
 
     private FileManager _fileManager;
     private ILexicalAnalyzer _lexicalAnalyzer;
+
     private const string _aboutPath = @"Resources\About.html";
     private const string _helpPath = @"Resources\Help.html";
+    private const string _grammarClassificationPath = @"Resources\GrammarClassification.html";
+    private const string _grammarPath = @"Resources\Grammar.html";
+    private const string _methodOfAnalysisPath = @"Resources\MethodOfAnalysis.html";
+    private const string _literaturePath = @"Resources\ListOfLiterature.html";
+    private const string _neutralizingErrorsPath = @"Resources\NeutralizingErrors.html";
+    private const string _problemStatementPath = @"Resources\ProblemStatement.html";
     private const string _testCasePath = @"Resources\test_case.txt";
+    private const string _sourceCode = @"https://github.com/Alexey-Sagaydak/Compiler";
+
     private string _currentFilePath;
     private string _fileContent;
     private bool _isFileModified;
@@ -22,10 +31,17 @@ public class MainWindowViewModel : ViewModelBase
     private RelayCommand _saveFileCommand;
     private RelayCommand _saveAsFileCommand;
     private RelayCommand _aboutCommand;
+    private RelayCommand _literatureCommand;
     private RelayCommand _helpCommand;
     private RelayCommand _exitCommand;
+    private RelayCommand _problemStatementCommand;
     private RelayCommand _openTestCaseCommand;
+    private RelayCommand _grammarCommand;
+    private RelayCommand _grammarClassificationCommand;
+    private RelayCommand _neutralizingErrorsCommand;
+    private RelayCommand _methodOfAnalysisCommand;
     private RelayCommand _startAnalyzersCommand;
+    private RelayCommand _viewSourceCodeCommand;
 
     public event EventHandler<StringEventArgs> StringSent;
     public event EventHandler<Lexeme> LexemeSent;
@@ -116,6 +132,41 @@ public class MainWindowViewModel : ViewModelBase
         IncorrectLexemes = new ObservableCollection<Lexeme>();
 
         _parser = new Parser();
+    }
+
+    public RelayCommand NeutralizingErrorsCommand
+    {
+        get => _neutralizingErrorsCommand ??= new RelayCommand(_ => HtmlHelper.OpenInBrowser(_neutralizingErrorsPath));
+    }
+    
+    public RelayCommand MethodOfAnalysisCommand
+    {
+        get => _methodOfAnalysisCommand ??= new RelayCommand(_ => HtmlHelper.OpenInBrowser(_methodOfAnalysisPath));
+    }
+    
+    public RelayCommand GrammarClassificationCommand
+    {
+        get => _grammarClassificationCommand ??= new RelayCommand(_ => HtmlHelper.OpenInBrowser(_grammarClassificationPath));
+    }
+
+    public RelayCommand GrammarCommand
+    {
+        get => _grammarCommand ??= new RelayCommand(_ => HtmlHelper.OpenInBrowser(_grammarPath));
+    }
+
+    public RelayCommand ProblemStatementCommand
+    {
+        get => _problemStatementCommand ??= new RelayCommand(_ => HtmlHelper.OpenInBrowser(_problemStatementPath));
+    }
+
+    public RelayCommand LiteratureCommand
+    {
+        get => _literatureCommand ??= new RelayCommand(_ => HtmlHelper.OpenInBrowser(_literaturePath));
+    }
+
+    public RelayCommand ViewSourceCodeCommand
+    {
+        get => _viewSourceCodeCommand ??= new RelayCommand(_ => HtmlHelper.OpenInBrowser(_sourceCode));
     }
 
     public RelayCommand CreateNewFileCommand

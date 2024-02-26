@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Классификация грамматики</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        p {
+            color: #555;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        code {
+            font-family: Consolas, monospace;
+            font-size: 16px;
+        }
+
+        ul, ol {
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+
+        li {
+            font-size: 18px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <h1>Классификация грамматики</h1>
+    <p>Понятие автоматных или регулярных грамматик было введено Н. Хомским как один из четырех классов формальных грамматик, обладающих самыми строгими ограничениями на форму записи правил вывода. Формально такие грамматики можно определить следующим образом:</p>
+    <p>Пусть <code>G = (V<sub>T</sub>, V<sub>N</sub>, P, Z)</code> - формальная грамматика, где:</p>
+    <ul>
+        <li><code>V<sub>T</sub></code> - множество терминальных символов,</li>
+        <li><code>V<sub>N</sub></code> - множество нетерминальных символов,</li>
+        <li><code>P</code> - множество правил вывода,</li>
+        <li><code>Z</code> - стартовый символ.</li>
+    </ul>
+    <p>Тогда автоматная грамматика имеет следующую структуру правил вывода:</p>
+    <pre><code>A → aB | a | ε</code></pre>
+    <p>Где:</p>
+    <ul>
+        <li><code>A ∈ V<sub>N</sub></code> - нетерминальный символ в левой части правила,</li>
+        <li><code>a ∈ V<sub>T</sub></code> - терминальный символ,</li>
+        <li><code>B ∈ V<sub>N</sub></code> - нетерминальный символ,</li>
+        <li><code>ε</code> - пустая строка.</li>
+    </ul>
+    <p>Это означает, что:</p>
+    <ol>
+        <li>В левой части правила может быть только один нетерминальный символ.</li>
+        <li>В правой части правила может быть либо один терминальный символ и один нетерминальный символ, либо только один терминальный символ, либо пустая строка.</li>
+    </ol>
+    <p>Грамматика, разработанная в этой программе, соответствует описанию автоматной грамматики, что подтверждает ее строгие ограничения на форму записи правил вывода.</p>
+</body>
+</html>

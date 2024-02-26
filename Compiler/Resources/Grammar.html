@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Грамматика</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        .grammar {
+            font-family: 'Courier New', Courier, monospace;
+            white-space: pre-wrap;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <h2>Грамматика</h2>
+    <div class="grammar">
+        G[Z] = { V<sub>T</sub>, V<sub>N</sub>, P, Z }<br><br>
+        Z = &lt;целочисленная константа&gt;<br><br>
+        V<sub>T</sub> = { ‘DECLARE’, ‘INTEGER’, ‘CONSTANT’, ‘a’…’z’, ‘A’…’Z’, ‘0’…’9’, ‘:’, ‘;’, ‘+’, ‘-‘, ‘=’, ‘_’ }<br><br>
+        V<sub>N</sub> = { &lt;целочисленная константа&gt;, &lt;выражение&gt;, &lt;константа&gt;, &lt;присваивание&gt;, &lt;число&gt;, &lt;знак&gt;, &lt;Б&gt;, &lt;Ц&gt; }<br><br>
+        P = {<br>
+        &emsp;1. &lt;целочисленная константа&gt; → ‘DECLARE’ ( &lt;выражение&gt; )<sup>+</sup><br>
+        &emsp;2. &lt;выражение&gt; → &lt;id&gt; &lt;константа&gt; &lt;число&gt; ’;’<br>
+        &emsp;3. &lt;id&gt; → &lt;Б&gt; ( &lt;Б&gt; | &lt;Ц&gt; | ‘_’ )<sup>*</sup><br>
+        &emsp;4. &lt;константа&gt; → ‘CONSTANT’ ’INTEGER’ &lt;присваивание&gt;<br>
+        &emsp;5. &lt;число&gt; → [ &lt;знак&gt; ] ( &lt;Ц&gt; )<sup>+</sup><br>
+        &emsp;6. &lt;присваивание&gt; → [ ‘:’ ] ‘=’<br>
+        &emsp;7. &lt;знак&gt; → { ‘+’ | ‘-‘ }<br>
+        &emsp;8. &lt;Б&gt; → ‘a’ | ‘b’ | … | ‘z’ | ‘A’ | ‘B’ | … | ‘Z’<br>
+        &emsp;9. &lt;Ц&gt; → ‘0’ | ‘1’ | … | ‘9’<br>
+        }
+    </div>
+</body>
+</html>
