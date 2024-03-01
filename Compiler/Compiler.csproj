@@ -55,6 +55,9 @@
     <None Update="Resources\SQL.xshd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Resources\styles.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Resources\test_case.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

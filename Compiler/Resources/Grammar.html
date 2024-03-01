@@ -4,33 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Грамматика</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-
-        h2 {
-            text-align: center;
-            color: #333;
-        }
-
-        .grammar {
-            font-family: 'Courier New', Courier, monospace;
-            white-space: pre-wrap;
-            background-color: #f9f9f9;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <h2>Грамматика</h2>
     <div class="grammar">
-        G[&lt;ЦК&gt; = &lt;целочисленная константа&gt;]:<br><br>
-        V<sub>T</sub> = { ‘a’…’z’, ‘A’…’Z’, ‘0’…’9’, ‘:’, ‘;’, ‘+’, ‘-‘, ‘=’, ‘_’ }<br><br>
-        V<sub>N</sub> = { &lt;ЦК&gt;, &lt;константа&gt;, &lt;присваивание&gt;, &lt;число&gt;, З, Б, Ц, E, ID }<br><br>
+        G[&lt;ЦК&gt; = &lt;целочисленная константа&gt;]:<br>
+        V<sub>T</sub> = { ‘a’…’z’, ‘A’…’Z’, ‘0’…’9’, ‘:’, ‘;’, ‘+’, ‘-‘, ‘=’, ‘_’ }<br>
+        V<sub>N</sub> = { &lt;ЦК&gt;, &lt;константа&gt;, &lt;присваивание&gt;, &lt;число&gt;, З, Б, Ц, E, ID }<br>
         P = {<br>
         &emsp;1. &lt;ЦК&gt; → ‘DECLARE’ E<br>
         &emsp;2. E → ID &lt;константа&gt; &lt;число&gt; ’;’<br>
