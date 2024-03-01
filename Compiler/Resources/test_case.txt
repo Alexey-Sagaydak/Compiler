@@ -1,6 +1,6 @@
 DECLARE
-product_price CONSTANT INTEGER := 150;
-productPrice CONSTANT INTEGER := +150;
+product_price CONSTANT INTEGER := +150;
+
 
 DECLARE expense_1_amount CONSTANT INTEGER := -50; DECLARE product_price CONSTANT INTEGER := -150;
 

@@ -27,14 +27,7 @@ public class SemicolonState : IState
 		}
 		else
 		{
-            if (nextType != null && nextType == LexemeType.Identifier)
-            {
-                _parser.CurrentState = _parser.IdState;
-            }
-            else
-            {
-                _parser.CurrentState = _parser.DeclareState;
-            }
+            _parser.CurrentState = _parser.DeclareState;
         }
 
         return flag;
