@@ -6,6 +6,7 @@ using System.Windows.Input;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using ICSharpCode.AvalonEdit.Highlighting;
 using System.IO;
+using System.Windows.Media.Animation;
 
 namespace Compiler
 {

@@ -19,7 +19,8 @@ public class MainWindowViewModel : ViewModelBase
     private const string _literaturePath = @"Resources\ListOfLiterature.html";
     private const string _neutralizingErrorsPath = @"Resources\NeutralizingErrors.html";
     private const string _problemStatementPath = @"Resources\ProblemStatement.html";
-    private const string _testCasePath = @"Resources\test_case.txt";
+    private const string _correctTestCasePath = @"Resources\correct_test_case.txt";
+    private const string _wrongTestCasePath = @"Resources\wrong_test_case.txt";
     private const string _sourceCode = @"https://github.com/Alexey-Sagaydak/Compiler";
 
     private string _currentFilePath;
@@ -36,12 +37,14 @@ public class MainWindowViewModel : ViewModelBase
     private RelayCommand _exitCommand;
     private RelayCommand _problemStatementCommand;
     private RelayCommand _openTestCaseCommand;
+    private RelayCommand _openWrongTestCaseCommand;
     private RelayCommand _grammarCommand;
     private RelayCommand _grammarClassificationCommand;
     private RelayCommand _neutralizingErrorsCommand;
     private RelayCommand _methodOfAnalysisCommand;
     private RelayCommand _startAnalyzersCommand;
     private RelayCommand _viewSourceCodeCommand;
+    private RelayCommand _removeErrorsCommand;
 
     public event EventHandler<StringEventArgs> StringSent;
     public event EventHandler<Lexeme> LexemeSent;
@@ -203,6 +206,11 @@ public class MainWindowViewModel : ViewModelBase
     {
         get => _openTestCaseCommand ??= new RelayCommand(OpenTestCase);
     }
+    
+    public RelayCommand OpenWrongTestCaseCommand
+    {
+        get => _openWrongTestCaseCommand ??= new RelayCommand(OpenWrongTestCase);
+    }
 
     public RelayCommand ExitCommand
     {
@@ -213,14 +221,36 @@ public class MainWindowViewModel : ViewModelBase
     {
         get => _startAnalyzersCommand ??= new RelayCommand(StartAnalysis);
     }
+    
+    public RelayCommand RemoveErrorsCommand
+    {
+        get => _removeErrorsCommand ??= new RelayCommand(RemoveErrors);
+    }
+
+    public void RemoveErrors(object obj)
+    {
+        for (int i = 0; i < 2; i++)
+        {
+            FileContent = TextCleaner.RemoveIncorrectLexemes(_fileContent, _incorrectLexemes);
+            StartAnalysis();
+        }
+
+        SendString(_fileContent);
+    }
 
     public void OpenTestCase(object obj)
     {
-        CurrentFilePath = _testCasePath;
+        CurrentFilePath = _correctTestCasePath;
         ReadFileContent();
     }
 
-    public void StartAnalysis(object obj)
+    public void OpenWrongTestCase(object obj)
+    {
+        CurrentFilePath = _wrongTestCasePath;
+        ReadFileContent();
+    }
+
+    public void StartAnalysis(object obj = null)
     {
         LexicalAnalysis();
         Parsing();

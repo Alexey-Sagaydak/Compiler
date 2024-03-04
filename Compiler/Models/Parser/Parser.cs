@@ -37,11 +37,43 @@ public class Parser : IParser
 
         if (lexemes.Count > 0 && lexemes.Last().Type != LexemeType.Semicolon)
         {
-            lexemes.Last().Message = "Ожидалось законченное выражение";
-            IncorrectLexemes.Add(lexemes.Last());
+            Lexeme lexeme = new Lexeme(LexemeType.UnfinishedExpression, "", lexemes.Last().EndIndex + 1, lexemes.Last().EndIndex + 1);
+            lexeme.Message = "Ожидалось законченное выражение";
+            IncorrectLexemes.Add(lexeme);
         }
 
         return IncorrectLexemes;
+    }
+
+    public bool FindLexeme(List<Lexeme> incorrectLexemes, Lexeme source, string key)
+    {
+        int index = source.Value.IndexOf(key);
+        string message = "Ожидалось " + key;
+
+        if (index != -1)
+        {
+            if (index > 0)
+            {
+                string leftValue = source.Value.Substring(0, index);
+                Lexeme leftLexeme = new Lexeme(source.Type, leftValue, source.StartIndex, source.StartIndex + index - 1);
+                leftLexeme.Message = message;
+                incorrectLexemes.Add(leftLexeme);
+            }
+
+            if (index + key.Length < source.Value.Length)
+            {
+                string rightValue = source.Value.Substring(index + key.Length);
+                Lexeme rightLexeme = new Lexeme(source.Type, rightValue, source.StartIndex + index + key.Length, source.EndIndex);
+                rightLexeme.Message = message;
+                incorrectLexemes.Add(rightLexeme);
+            }
+
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public Parser()

@@ -21,8 +21,15 @@ public class ConstantState : IState
 
         if (lexeme.Type != LexemeType.CONSTANT)
         {
-            lexeme.Message = "Ожидалось ключевое слово \"CONSTANT\"";
-            _parser.IncorrectLexemes.Add(lexeme);
+            if (!(_parser.FindLexeme(_parser.IncorrectLexemes, lexeme, "CONSTANT")))
+            {
+                lexeme.Message = "Ожидалось ключевое слово \"CONSTANT\"";
+                _parser.IncorrectLexemes.Add(lexeme);
+            }
+            else
+            {
+                _parser.CurrentState = _parser.IntegerState;
+            }
             flag = false;
         }
         else

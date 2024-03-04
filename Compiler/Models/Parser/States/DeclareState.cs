@@ -21,8 +21,15 @@ public class DeclareState : IState
 
         if (lexeme.Type != LexemeType.DECLARE)
         {
-            lexeme.Message = "Ожидалось ключевое слово \"DECLARE\"";
-            _parser.IncorrectLexemes.Add(lexeme);
+            if (!(_parser.FindLexeme(_parser.IncorrectLexemes, lexeme, "DECLARE")))
+            {
+                lexeme.Message = "Ожидалось ключевое слово \"DECLARE\"";
+                _parser.IncorrectLexemes.Add(lexeme);
+            }
+            else
+            {
+                _parser.CurrentState = _parser.IdState;
+            }
             flag = false;
         }
         else

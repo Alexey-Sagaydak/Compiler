@@ -21,8 +21,15 @@ public class IntegerState : IState
 
         if (lexeme.Type != LexemeType.INTEGER)
         {
-            lexeme.Message = "Ожидалось ключевое слово \"INTEGER\"";
-            _parser.IncorrectLexemes.Add(lexeme);
+            if (!(_parser.FindLexeme(_parser.IncorrectLexemes, lexeme, "INTEGER")))
+            {
+                lexeme.Message = "Ожидалось ключевое слово \"INTEGER\"";
+                _parser.IncorrectLexemes.Add(lexeme);
+            }
+            else
+            {
+                _parser.CurrentState = _parser.AssignmentOperatorState;
+            }
             flag = false;
         }
         else
