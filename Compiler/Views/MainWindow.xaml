@@ -9,7 +9,7 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:cmd="http://schemas.microsoft.com/winfx/2006/xaml/presentation/command"
         mc:Ignorable="d" DragEnter="Window_DragEnter" Drop="Window_Drop"
-        Title="{Binding WindowTitle}" Height="700" Width="1100" MinHeight="300" MinWidth="400" Icon="../Resources/logo.ico" Loaded="Window_Loaded">
+        Title="{Binding WindowTitle}" Height="700" PreviewKeyDown="Window_PreviewKeyDown" Width="1100" MinHeight="300" MinWidth="400" Icon="../Resources/logo.ico" Loaded="Window_Loaded">
 
     <Window.Resources>
         <local:IncrementConverter x:Key="IncrementConverter" />
@@ -98,7 +98,7 @@
                 <MenuItem Header="Классификация грамматики" Command="{Binding GrammarClassificationCommand}"/>
                 <MenuItem Header="Метод анализа" Command="{Binding MethodOfAnalysisCommand}"/>
                 <MenuItem Header="Диагностика и нейтрализация ошибок" Command="{Binding NeutralizingErrorsCommand}"/>
-                <MenuItem Header="Тестовый пример" ItemContainerStyle="{StaticResource MenuItemStyle}">
+                <MenuItem Header="Тестовые примеры" ItemContainerStyle="{StaticResource MenuItemStyle}">
                     <MenuItem Header="Верные данные" Command="{Binding OpenTestCaseCommand}"/>
                     <MenuItem Header="Ошибочные данные" Command="{Binding OpenWrongTestCaseCommand}"/>
                 </MenuItem>
@@ -264,17 +264,8 @@
             <TextBlock Text="{Binding IncorrectLexemes.Count}" Margin="5 0 5 0" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="16"/>
             <Button Padding="0" x:Name="magicButton" Command="{Binding RemoveErrorsCommand}" Margin="0" Height="16" BorderBrush="#00481E94" Foreground="#FF1F2DFF" Background="#00E1FFD0" VerticalAlignment="Center" HorizontalAlignment="Center">
                 <Button.ToolTip>
-                    <ToolTip Content="Исправить найденные ошибки" />
+                    <ToolTip Content="Исправить найденные ошибки (F6)" />
                 </Button.ToolTip>
-                <Button.Style>
-                    <Style TargetType="Button">
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#0048C7F1" />
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </Button.Style>
                 <materialDesign:PackIcon Kind="AutoFix" />
             </Button>
         </StackPanel>

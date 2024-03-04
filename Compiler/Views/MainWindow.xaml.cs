@@ -175,5 +175,19 @@ namespace Compiler
                 catch { }
             }));
         }
+
+        private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.F5)
+            {
+                ((MainWindowViewModel)(DataContext)).StartAnalyzersCommand.Execute(null);
+                e.Handled = true;
+            }
+            else if (e.Key == Key.F6)
+            {
+                ((MainWindowViewModel)(DataContext)).RemoveErrorsCommand.Execute(null);
+                e.Handled = true;
+            }
+        }
     }
 }
