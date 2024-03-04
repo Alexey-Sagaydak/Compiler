@@ -183,7 +183,7 @@ namespace Compiler
                 ((MainWindowViewModel)(DataContext)).StartAnalyzersCommand.Execute(null);
                 e.Handled = true;
             }
-            else if (e.Key == Key.F6)
+            else if (e.Key == Key.F6 && errorStackPanel.Visibility == Visibility.Visible)
             {
                 ((MainWindowViewModel)(DataContext)).RemoveErrorsCommand.Execute(null);
                 e.Handled = true;
