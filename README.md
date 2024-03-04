@@ -174,18 +174,18 @@ DECLARE productPrice3 CONSTANT INTEGER := 150; DECLARE expense_amount_4 CONSTANT
 
 G[&lt;ЦК&gt; = &lt;целочисленная константа&gt;]:
 
-V<sub>T</sub> = { ‘a’…’z’, ‘A’…’Z’, ‘0’…’9’, ‘:’, ‘;’, ‘+’, ‘-‘, ‘=’, ‘_’ }
+V<sub>T</sub> = { ‘CONSTANT’, ‘INTEGER’, ‘a’…’z’, ‘A’…’Z’, ‘0’…’9’, ‘:’, ‘;’, ‘+’, ‘-‘, ‘=’, ‘_’ }
 
-V<sub>N</sub> = { &lt;ЦК&gt;, &lt;константа&gt;, &lt;присваивание&gt;, &lt;число&gt;, З, Б, Ц, E, ID }
+V<sub>N</sub> = { &lt;ЦК&gt;, E, CONST, INT, ASSIGN, NUMBER, SIGN, Б, Ц }
 
 P = {
 1. &lt;ЦК&gt; → ‘DECLARE’ E
-2. E → ID &lt;константа&gt; &lt;число&gt; ’;’
-3. ID → Б { Б | Ц | ‘_’ }<br>
-4. &lt;константа&gt; → ‘CONSTANT’ ’INTEGER’ &lt;присваивание&gt;
-5. &lt;число&gt; → З [ Ц ]
-6. &lt;присваивание&gt; → ‘:=’ | ‘=’
-7. З → ‘+’ | ‘-‘ | ε
+2. E → Б { Б | Ц | ‘_’ } CONST
+3. CONST → ‘CONSTANT’ INT
+4. INT → ‘INTEGER’ ASSIGN
+5. ASSIGN → ‘:=’ NUMBER | ‘=’ NUMBER
+6. NUMBER → SIGN [ Ц ]
+7. SIGN → ‘+’ | ‘-‘ | ε
 8. Б → ‘a’ | ‘b’ | … | ‘z’ | ‘A’ | ‘B’ | … | ‘Z’
 9. Ц → ‘0’ | ‘1’ | … | ‘9’
 
