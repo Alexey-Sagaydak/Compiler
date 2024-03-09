@@ -22,7 +22,7 @@ public class SignState : IState
     public bool Handle()
     {
         stringHelper.SkipSpaces();
-        char currentSymbol = stringHelper.Current;
+        char currentSymbol;
 
         ParserError error = new ParserError("Ожидался знак или целое число", stringHelper.Index + 1, stringHelper.Index + 1);
         while (true)
@@ -31,6 +31,8 @@ public class SignState : IState
             {
                 if (error.Value != string.Empty)
                     errors.Add(error);
+                errors.Add(new ParserError("Обнаружено незаконченное выражение", stringHelper.Index, stringHelper.Index, ErrorType.UnfinishedExpression));
+
                 return false;
             }
 

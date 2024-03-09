@@ -24,13 +24,14 @@ public class IntegerState : IState
         stringHelper.SkipSpaces();
         foreach (char c in "INTEGER")
         {
-            ParserError error = new ParserError("Ожидалось ключевое слово INTEGER", stringHelper.Index + 1, stringHelper.Index + 1);
+            ParserError error = new ParserError("Ожидалось ключевое слово \"INTEGER\"", stringHelper.Index + 1, stringHelper.Index + 1);
             while (true)
             {
                 if (!stringHelper.CanGetNext)
                 {
                     if (error.Value != string.Empty)
                         errors.Add(error);
+                    errors.Add(new ParserError("Обнаружено незаконченное выражение", stringHelper.Index, stringHelper.Index, ErrorType.UnfinishedExpression));
                     return false;
                 }
                 char currentSymbol = stringHelper.Current;

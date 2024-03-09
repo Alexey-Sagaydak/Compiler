@@ -24,13 +24,14 @@ public class NumberState : IState
         stringHelper.SkipSpaces();
         while (stringHelper.Current != ';')
         {
-            ParserError error = new ParserError("Ожидалось число", stringHelper.Index + 1, stringHelper.Index + 1);
+            ParserError error = new ParserError("Ожидалось число или оператор конца выражения \";\"", stringHelper.Index + 1, stringHelper.Index + 1);
             while (true)
             {
                 if (!stringHelper.CanGetNext)
                 {
                     if (error.Value != string.Empty)
                         errors.Add(error);
+                    errors.Add(new ParserError("Обнаружено незаконченное выражение", stringHelper.Index, stringHelper.Index, ErrorType.UnfinishedExpression));
                     return false;
                 }
                 char currentSymbol = stringHelper.Current;

@@ -48,11 +48,13 @@ public class MainWindowViewModel : ViewModelBase
 
     public event EventHandler<StringEventArgs> StringSent;
     public event EventHandler<Lexeme> LexemeSent;
+    public event EventHandler<ParserError> ErrorSent;
 
     private List<Lexeme> _lexemesList;
     private ObservableCollection<Lexeme> _lexemes;
     private ObservableCollection<ParserError> _incorrectLexemes;
     private Lexeme _selectedLexeme;
+    private ParserError _selectedError;
 
     public event EventHandler RequestClose;
 
@@ -83,6 +85,17 @@ public class MainWindowViewModel : ViewModelBase
         {
             _selectedLexeme = value;
             LexemeSent(this, value);
+            OnPropertyChanged(nameof(SelectedLexeme));
+        }
+    }
+
+    public ParserError SelectedError
+    {
+        get { return _selectedError; }
+        set
+        {
+            _selectedError = value;
+            ErrorSent(this, value);
             OnPropertyChanged(nameof(SelectedLexeme));
         }
     }
@@ -229,6 +242,7 @@ public class MainWindowViewModel : ViewModelBase
 
     public void RemoveErrors(object obj)
     {
+        StartAnalysis();
         FileContent = TextCleaner.RemoveIncorrectLexemes(_fileContent, _incorrectLexemes);
         StartAnalysis();
 

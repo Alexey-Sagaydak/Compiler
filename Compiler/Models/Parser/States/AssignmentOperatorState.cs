@@ -23,7 +23,7 @@ public class AssignmentOperatorState : IState
     public bool Handle()
     {
         stringHelper.SkipSpaces();
-        char currentSymbol = stringHelper.Current;
+        char currentSymbol;
         bool IsLeftPartMet = false;
 
         ParserError error = new ParserError("Ожидался оператор присваивания", stringHelper.Index + 1, stringHelper.Index + 1);
@@ -33,6 +33,7 @@ public class AssignmentOperatorState : IState
             {
                 if (error.Value != string.Empty)
                     errors.Add(error);
+                errors.Add(new ParserError("Обнаружено незаконченное выражение", stringHelper.Index, stringHelper.Index, ErrorType.UnfinishedExpression));
                 return false;
             }
 

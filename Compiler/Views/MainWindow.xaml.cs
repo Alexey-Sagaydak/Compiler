@@ -22,6 +22,7 @@ namespace Compiler
             MainWindowViewModel viewModel = new MainWindowViewModel();
             viewModel.StringSent += OnStringReceived;
             viewModel.LexemeSent += OnLexemeReceived;
+            viewModel.ErrorSent += OnErrorReceived;
             viewModel.RequestClose += (sender, e) => Close();
             Closing += MainWindow_Closing;
 
@@ -56,6 +57,14 @@ namespace Compiler
         }
 
         public void OnLexemeReceived(object sender, Lexeme e)
+        {
+            if (e != null && e.EndIndex <= textEditor.Document.Text.Length)
+            {
+                textEditor.Select(e.StartIndex - 1, e.EndIndex - e.StartIndex + 1);
+            }
+        }
+
+        public void OnErrorReceived(object sender, ParserError e)
         {
             if (e != null && e.EndIndex <= textEditor.Document.Text.Length)
             {
