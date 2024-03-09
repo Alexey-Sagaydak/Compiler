@@ -108,8 +108,7 @@
 ### Примеры допустимых строк
 
 ```sql
-DECLARE
-product_price CONSTANT INTEGER = +150;
+DECLARE product_price CONSTANT INTEGER = +150;
 ```
 
 ```sql
@@ -184,7 +183,7 @@ P = {
 3. CONST → ‘CONSTANT’ INT
 4. INT → ‘INTEGER’ ASSIGN
 5. ASSIGN → ‘:=’ NUMBER | ‘=’ NUMBER
-6. NUMBER → SIGN [ Ц ]
+6. NUMBER → SIGN [ Ц ] ‘;’
 7. SIGN → ‘+’ | ‘-‘ | ε
 8. Б → ‘a’ | ‘b’ | … | ‘z’ | ‘A’ | ‘B’ | … | ‘Z’
 9. Ц → ‘0’ | ‘1’ | … | ‘9’
