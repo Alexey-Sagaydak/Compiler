@@ -8,35 +8,50 @@ namespace Compiler;
 
 public class ConstantState : IState
 {
-    private Parser _parser;
+    private List<ParserError> errors;
+    private StringHelper stringHelper;
+    private Dictionary<LexemeType, IState> StateMap;
 
-    public ConstantState(Parser parser)
+    public ConstantState(List<ParserError> errors, StringHelper stringHelper, Dictionary<LexemeType, IState> StateMap)
     {
-        _parser = parser;
+        this.errors = errors;
+        this.stringHelper = stringHelper;
+        this.StateMap = StateMap;
     }
 
-    public bool Handle(Lexeme lexeme, LexemeType? nextType)
+    public bool Handle()
     {
-        bool flag = true;
-
-        if (lexeme.Type != LexemeType.CONSTANT)
+        stringHelper.SkipSpaces();
+        foreach (char c in "CONSTANT ")
         {
-            if (!(_parser.FindLexeme(_parser.IncorrectLexemes, lexeme, "CONSTANT")))
+            ParserError error = new ParserError("Ожидалось ключевое слово CONSTANT", stringHelper.Index + 1, stringHelper.Index + 1);
+            while (true)
             {
-                lexeme.Message = "Ожидалось ключевое слово \"CONSTANT\"";
-                _parser.IncorrectLexemes.Add(lexeme);
+                if (!stringHelper.CanGetNext)
+                {
+                    if (error.Value != string.Empty)
+                        errors.Add(error);
+                    return false;
+                }
+                char currentSymbol = stringHelper.Current;
+
+                if (currentSymbol == c)
+                {
+                    if (error.Value != string.Empty)
+                        errors.Add(error);
+                    currentSymbol = stringHelper.Next;
+                    break;
+                }
+                else
+                {
+                    error.Value += currentSymbol;
+                    error.EndIndex = stringHelper.Index + 1;
+                }
+                currentSymbol = stringHelper.Next;
             }
-            else
-            {
-                _parser.CurrentState = _parser.IntegerState;
-            }
-            flag = false;
-        }
-        else
-        {
-            _parser.CurrentState = _parser.IntegerState;
         }
 
-        return flag;
+        StateMap[LexemeType.INTEGER].Handle();
+        return true;
     }
 }

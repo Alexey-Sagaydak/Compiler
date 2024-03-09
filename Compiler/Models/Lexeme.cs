@@ -19,7 +19,9 @@ public enum LexemeType
     Sign = 9,
     Semicolon = 10,
     InvalidCharacter = 11,
-    UnfinishedExpression = 12
+    UnfinishedExpression = 12,
+    Current = 13,
+    Number = 14
 }
 
 public class Lexeme

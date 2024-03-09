@@ -7,10 +7,10 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h2>Грамматика</h2>
+    <h1>Грамматика</h1>
     <div class="grammar">
     G[&lt;ЦК&gt; = &lt;целочисленная константа&gt;]:<br>
-    V<sub>T</sub> = { ‘CONSTANT’, ‘INTEGER’, ‘a’…’z’, ‘A’…’Z’, ‘0’…’9’, ‘:’, ‘;’, ‘+’, ‘-‘, ‘=’, ‘_’ }<br>
+    V<sub>T</sub> = { ‘DECLARE’, ‘CONSTANT’‘CONSTANT’, ‘INTEGER’, ‘a’…’z’, ‘A’…’Z’, ‘0’…’9’, ‘:=’, ‘=’, ‘+’, ‘-‘, ‘;’, ‘_’ }<br>
     V<sub>N</sub> = { &lt;ЦК&gt;, E, CONST, INT, ASSIGN, NUMBER, SIGN, Б, Ц }<br>
     P = {
     &emsp;1. &lt;ЦК&gt; → ‘DECLARE’ E

@@ -8,35 +8,50 @@ namespace Compiler;
 
 public class DeclareState : IState
 {
-    private Parser _parser;
+    private List<ParserError> errors;
+    private StringHelper stringHelper;
+    private Dictionary<LexemeType, IState> stateMap;
 
-    public DeclareState(Parser parser)
+    public DeclareState(List<ParserError> errors, StringHelper stringHelper, Dictionary<LexemeType, IState> StateMap)
     {
-        _parser = parser;
+        this.errors = errors;
+        this.stringHelper = stringHelper;
+        stateMap = StateMap;
     }
 
-    public bool Handle(Lexeme lexeme, LexemeType? nextType)
+    public bool Handle()
     {
-        bool flag = true;
-
-        if (lexeme.Type != LexemeType.DECLARE)
+        stringHelper.SkipSpaces();
+        foreach (char c in "DECLARE ")
         {
-            if (!(_parser.FindLexeme(_parser.IncorrectLexemes, lexeme, "DECLARE")))
+            ParserError error = new ParserError("Ожидалось ключевое слово DECLARE", stringHelper.Index + 1, stringHelper.Index + 1);
+            while (true)
             {
-                lexeme.Message = "Ожидалось ключевое слово \"DECLARE\"";
-                _parser.IncorrectLexemes.Add(lexeme);
+                if (!stringHelper.CanGetNext)
+                {
+                    if (error.Value != string.Empty)
+                        errors.Add(error);
+                    return false;
+                }
+                char currentSymbol = stringHelper.Current;
+                
+                if (currentSymbol == c)
+                {
+                    if (error.Value != string.Empty)
+                        errors.Add(error);
+                    currentSymbol = stringHelper.Next;
+                    break;
+                }
+                else
+                {
+                    error.Value += currentSymbol;
+                    error.EndIndex = stringHelper.Index + 1;
+                }
+                currentSymbol = stringHelper.Next;
             }
-            else
-            {
-                _parser.CurrentState = _parser.IdState;
-            }
-            flag = false;
-        }
-        else
-        {
-            _parser.CurrentState = _parser.IdState;
         }
 
-        return flag;
+        stateMap[LexemeType.Identifier].Handle();
+        return true;
     }
 }

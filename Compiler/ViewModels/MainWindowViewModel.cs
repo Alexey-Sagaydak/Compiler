@@ -51,7 +51,7 @@ public class MainWindowViewModel : ViewModelBase
 
     private List<Lexeme> _lexemesList;
     private ObservableCollection<Lexeme> _lexemes;
-    private ObservableCollection<Lexeme> _incorrectLexemes;
+    private ObservableCollection<ParserError> _incorrectLexemes;
     private Lexeme _selectedLexeme;
 
     public event EventHandler RequestClose;
@@ -66,7 +66,7 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
-    public ObservableCollection<Lexeme> IncorrectLexemes
+    public ObservableCollection<ParserError> IncorrectLexemes
     {
         get { return _incorrectLexemes; }
         set
@@ -132,9 +132,9 @@ public class MainWindowViewModel : ViewModelBase
         CurrentFilePath = string.Empty;
         IsFileModified = false;
         _lexicalAnalyzer = new LexicalAnalyzer();
-        IncorrectLexemes = new ObservableCollection<Lexeme>();
+        IncorrectLexemes = new ObservableCollection<ParserError>();
 
-        _parser = new Parser();
+        _parser = new Parser(string.Empty);
     }
 
     public RelayCommand NeutralizingErrorsCommand
@@ -229,11 +229,8 @@ public class MainWindowViewModel : ViewModelBase
 
     public void RemoveErrors(object obj)
     {
-        for (int i = 0; i < 2; i++)
-        {
-            FileContent = TextCleaner.RemoveIncorrectLexemes(_fileContent, _incorrectLexemes);
-            StartAnalysis();
-        }
+        FileContent = TextCleaner.RemoveIncorrectLexemes(_fileContent, _incorrectLexemes);
+        StartAnalysis();
 
         SendString(_fileContent);
     }
@@ -265,16 +262,7 @@ public class MainWindowViewModel : ViewModelBase
 
     public void Parsing()
     {
-        List<Lexeme> cleanLexemes = new List<Lexeme>();
-        foreach (Lexeme lexeme in _lexemesList)
-        {
-            if (lexeme.Type != LexemeType.Whitespace && lexeme.Type != LexemeType.NewLine)
-            {
-                cleanLexemes.Add(lexeme);
-            }
-        }
-
-        IncorrectLexemes = new ObservableCollection<Lexeme>(_parser.Parse(cleanLexemes));
+        IncorrectLexemes = new ObservableCollection<ParserError>(_parser.Parse(FileContent));
     }
 
     public void Exit(object obj = null)

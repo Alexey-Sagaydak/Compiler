@@ -3,33 +3,34 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Compiler;
 
 public class SemicolonState : IState
 {
-	private Parser _parser;
+    private List<ParserError> errors;
+    private StringHelper stringHelper;
+    private Dictionary<LexemeType, IState> StateMap;
 
-	public SemicolonState(Parser parser)
-	{
-		_parser = parser;
-	}
+    public SemicolonState(List<ParserError> errors, StringHelper stringHelper, Dictionary<LexemeType, IState> StateMap)
+    {
+        this.errors = errors;
+        this.stringHelper = stringHelper;
+        this.StateMap = StateMap;
+    }
 
-	public bool Handle(Lexeme lexeme, LexemeType? nextType)
-	{
-		bool flag = true;
-
-		if (lexeme.Type != LexemeType.Semicolon)
-		{
-			lexeme.Message = "Ожидалось \";\"";
-			_parser.IncorrectLexemes.Add(lexeme);
-			flag = false;
-		}
-		else
-		{
-            _parser.CurrentState = _parser.DeclareState;
+    public bool Handle()
+    {
+        if (stringHelper.CanGetNext)
+        {
+            _ = stringHelper.Next;
+            StateMap[LexemeType.DECLARE].Handle();
         }
-
-        return flag;
-	}
+        else
+        {
+            return false;
+        }
+        return true;
+    }
 }

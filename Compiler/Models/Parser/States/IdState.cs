@@ -3,33 +3,57 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Compiler;
 
 public class IdState : IState
 {
-    private Parser _parser;
+    private List<ParserError> errors;
+    private StringHelper stringHelper;
+    private Dictionary<LexemeType, IState> StateMap;
 
-    public IdState(Parser parser)
+    public IdState(List<ParserError> errors, StringHelper stringHelper, Dictionary<LexemeType, IState> StateMap)
     {
-        _parser = parser;
+        this.errors = errors;
+        this.stringHelper = stringHelper;
+        this.StateMap = StateMap;
     }
 
-    public bool Handle(Lexeme lexeme, LexemeType? nextType)
+    public bool Handle()
     {
-        bool flag = true;
+        stringHelper.SkipSpaces();
+        char currentSymbol = stringHelper.Current;
+        bool IsNotFirstSymbol = false;
 
-        if (lexeme.Type != LexemeType.Identifier)
+        ParserError error = new ParserError("Ожидался идентификатор", stringHelper.Index + 1, stringHelper.Index + 1);
+        while (!stringHelper.isSpace(currentSymbol))
         {
-            lexeme.Message = "Ожидался идентификатор";
-            _parser.IncorrectLexemes.Add(lexeme);
-            flag = false;
-        }
-        else
-        {
-            _parser.CurrentState = _parser.ConstantState;
+            if (!stringHelper.CanGetNext)
+            {
+                if (error.Value != string.Empty)
+                    errors.Add(error);
+                return false;
+            }
+
+            currentSymbol = stringHelper.Current;
+
+            if (char.IsLetter(currentSymbol) || ((char.IsDigit(currentSymbol) || currentSymbol == '_') && IsNotFirstSymbol))
+            {
+                IsNotFirstSymbol = true;
+                if (error.Value != string.Empty)
+                    errors.Add(error);
+                error = new ParserError("Ожидался идентификатор", stringHelper.Index + 1, stringHelper.Index + 1);
+            }
+            else
+            {
+                error.Value += currentSymbol;
+                error.EndIndex = stringHelper.Index + 1;
+            }
+            currentSymbol = stringHelper.Next;
         }
 
-        return flag;
+        StateMap[LexemeType.CONSTANT].Handle();
+        return true;
     }
 }

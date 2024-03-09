@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Compiler;
 
-public interface IState
+public class EnumContainer
 {
-    bool Handle();
+    public LexemeType Type { get; set; }
 }

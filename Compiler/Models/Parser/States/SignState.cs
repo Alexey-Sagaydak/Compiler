@@ -8,28 +8,57 @@ namespace Compiler;
 
 public class SignState : IState
 {
-    private Parser _parser;
+    private List<ParserError> errors;
+    private StringHelper stringHelper;
+    private Dictionary<LexemeType, IState> StateMap;
 
-    public SignState(Parser parser)
+    public SignState(List<ParserError> errors, StringHelper stringHelper, Dictionary<LexemeType, IState> StateMap)
     {
-        _parser = parser;
+        this.errors = errors;
+        this.stringHelper = stringHelper;
+        this.StateMap = StateMap;
     }
 
-    public bool Handle(Lexeme lexeme, LexemeType? nextType)
+    public bool Handle()
     {
-        bool flag = true;
+        stringHelper.SkipSpaces();
+        char currentSymbol = stringHelper.Current;
 
-        if (lexeme.Type != LexemeType.Sign)
+        ParserError error = new ParserError("Ожидался знак или целое число", stringHelper.Index + 1, stringHelper.Index + 1);
+        while (true)
         {
-            lexeme.Message = "Ожидался знак";
-            _parser.IncorrectLexemes.Add(lexeme);
-            flag = false;
-        }
-        else
-        {
-            _parser.CurrentState = _parser.NumberState;
-        }
+            if (!stringHelper.CanGetNext)
+            {
+                if (error.Value != string.Empty)
+                    errors.Add(error);
+                return false;
+            }
 
-        return flag;
+            currentSymbol = stringHelper.Current;
+
+            if (currentSymbol == '-' || currentSymbol == '+')
+            {
+                if (error.Value != string.Empty)
+                    errors.Add(error);
+                if (stringHelper.CanGetNext)
+                    currentSymbol = stringHelper.Next;
+                break;
+            }
+            else if (char.IsDigit(currentSymbol))
+            {
+                if (error.Value != string.Empty)
+                    errors.Add(error);
+                StateMap[LexemeType.Number].Handle();
+                return true;
+            }
+            else
+            {
+                error.Value += currentSymbol;
+                error.EndIndex = stringHelper.Index + 1;
+            }
+            currentSymbol = stringHelper.Next;
+        }
+        StateMap[LexemeType.Number].Handle();
+        return true;
     }
 }

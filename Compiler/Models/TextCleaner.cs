@@ -10,13 +10,13 @@ namespace Compiler;
 
 public static class TextCleaner
 {
-    public static string RemoveIncorrectLexemes(string inputString, ObservableCollection<Lexeme> _incorrectLexemes)
+    public static string RemoveIncorrectLexemes(string inputString, ObservableCollection<ParserError> _incorrectLexemes)
     {
-        if (_incorrectLexemes.Last().Type == LexemeType.UnfinishedExpression)
-        {
-            inputString = inputString.Insert(_incorrectLexemes.Last().EndIndex - 1, "DECLARE var CONSTANT INTEGER = +10;");
-            _incorrectLexemes.Remove(_incorrectLexemes.Last());
-        }
+        //if (_incorrectLexemes.Last().Type == LexemeType.UnfinishedExpression)
+        //{
+        //    inputString = inputString.Insert(_incorrectLexemes.Last().EndIndex - 1, "DECLARE var CONSTANT INTEGER = +10;");
+        //    _incorrectLexemes.Remove(_incorrectLexemes.Last());
+        //}
 
         foreach (var lexeme in _incorrectLexemes.Reverse())
         {

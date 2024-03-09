@@ -9,35 +9,59 @@ namespace Compiler;
 
 public class AssignmentOperatorState : IState
 {
-    private Parser _parser;
+    private List<ParserError> errors;
+    private StringHelper stringHelper;
+    private Dictionary<LexemeType, IState> StateMap;
 
-    public AssignmentOperatorState(Parser parser)
+    public AssignmentOperatorState(List<ParserError> errors, StringHelper stringHelper, Dictionary<LexemeType, IState> StateMap)
     {
-        _parser = parser;
+        this.errors = errors;
+        this.stringHelper = stringHelper;
+        this.StateMap = StateMap;
     }
 
-    public bool Handle(Lexeme lexeme, LexemeType? nextType)
+    public bool Handle()
     {
-        bool flag = true;
+        stringHelper.SkipSpaces();
+        char currentSymbol = stringHelper.Current;
+        bool IsLeftPartMet = false;
 
-        if (lexeme.Type != LexemeType.AssignmentOperator)
+        ParserError error = new ParserError("Ожидался оператор присваивания", stringHelper.Index + 1, stringHelper.Index + 1);
+        while (true)
         {
-            lexeme.Message = "Ожидался оператор присваивания";
-            _parser.IncorrectLexemes.Add(lexeme);
-            flag = false;
-        }
-        else
-        {
-            if (nextType != null && nextType == LexemeType.Sign)
+            if (!stringHelper.CanGetNext)
             {
-                _parser.CurrentState = _parser.SignState;
+                if (error.Value != string.Empty)
+                    errors.Add(error);
+                return false;
+            }
+
+            currentSymbol = stringHelper.Current;
+
+            if (currentSymbol == ':' && !IsLeftPartMet)
+            {
+                IsLeftPartMet = true;
+                if (error.Value != string.Empty)
+                    errors.Add(error);
+                error = new ParserError("Ожидался оператор присваивания", stringHelper.Index + 2, stringHelper.Index + 1);
+            }
+            else if (currentSymbol == '=')
+            {
+                if (error.Value != string.Empty)
+                    errors.Add(error);
+                if (stringHelper.CanGetNext)
+                    currentSymbol = stringHelper.Next;
+                break;
             }
             else
             {
-                _parser.CurrentState = _parser.NumberState;
+                error.Value += currentSymbol;
+                error.EndIndex = stringHelper.Index + 1;
             }
+            currentSymbol = stringHelper.Next;
         }
 
-        return flag;
+        StateMap[LexemeType.Sign].Handle();
+        return true;
     }
 }
