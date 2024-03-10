@@ -175,7 +175,7 @@ G[&lt;ЦК&gt; = &lt;целочисленная константа&gt;]:
 
 V<sub>T</sub> = { ‘CONSTANT’, ‘INTEGER’, ‘a’…’z’, ‘A’…’Z’, ‘0’…’9’, ‘:’, ‘;’, ‘+’, ‘-‘, ‘=’, ‘_’ }
 
-V<sub>N</sub> = { &lt;ЦК&gt;, E, CONST, INT, ASSIGN, NUMBER, SIGN, Б, Ц }
+V<sub>N</sub> = { &lt;ЦК&gt;, E, CONST, INT, ASSIGN, NUMBER, SIGN, UNSIGNEDINT, END, Б, Ц }
 
 P = {
 1. &lt;ЦК&gt; → ‘DECLARE’ E
