@@ -11,7 +11,7 @@
     <div class="grammar">
     G[&lt;ЦК&gt; = &lt;целочисленная константа&gt;]:<br>
     V<sub>T</sub> = { ‘DECLARE’, ‘CONSTANT’‘CONSTANT’, ‘INTEGER’, ‘a’…’z’, ‘A’…’Z’, ‘0’…’9’, ‘:=’, ‘=’, ‘+’, ‘-‘, ‘;’, ‘_’ }<br>
-    V<sub>N</sub> = { &lt;ЦК&gt;, E, CONST, INT, ASSIGN, NUMBER, SIGN, Б, Ц }<br>
+    V<sub>N</sub> = { &lt;ЦК&gt;, E, CONST, INT, ASSIGN, NUMBER, SIGN, UNSIGNEDINT, END, Б, Ц }<br>
     P = {
     &emsp;1. &lt;ЦК&gt; → ‘DECLARE’ E
     &emsp;2. E → Б { Б | Ц | ‘_’ } CONST
