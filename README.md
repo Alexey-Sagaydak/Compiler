@@ -183,10 +183,12 @@ P = {
 3. CONST → ‘CONSTANT’ INT
 4. INT → ‘INTEGER’ ASSIGN
 5. ASSIGN → ‘:=’ NUMBER | ‘=’ NUMBER
-6. NUMBER → SIGN [ Ц ] ‘;’
-7. SIGN → ‘+’ | ‘-‘ | ε
-8. Б → ‘a’ | ‘b’ | … | ‘z’ | ‘A’ | ‘B’ | … | ‘Z’
-9. Ц → ‘0’ | ‘1’ | … | ‘9’
+6. NUMBER → SIGN UNSIGNEDINT
+7. SIGN → [ ‘+’ | ‘-‘ ]
+8. UNSIGNEDINT → Ц { Ц } END
+9. END → ‘;’
+10. Б → ‘a’ | ‘b’ | … | ‘z’ | ‘A’ | ‘B’ | … | ‘Z’
+11. Ц → ‘0’ | ‘1’ | … | ‘9’
 
 }
 
