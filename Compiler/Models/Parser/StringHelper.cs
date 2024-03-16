@@ -46,6 +46,11 @@ public class StringHelper
         get => str.Length - 1 > Index;
     }
 
+    public bool CanGetCurrent
+    {
+        get => str.Length - 1 >= Index;
+    }
+
     public bool CanGetPrevious
     {
         get => Index - 1 >= 0;

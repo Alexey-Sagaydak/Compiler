@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Compiler;
 
@@ -22,6 +23,13 @@ public class NumberState : IState
     public bool Handle()
     {
         stringHelper.SkipSpaces();
+
+        if (!stringHelper.CanGetCurrent)
+        {
+            errors.Add(new ParserError("Обнаружено незаконченное выражение", stringHelper.Index, stringHelper.Index, ErrorType.UnfinishedExpression));
+            return false;
+        }
+
         while (stringHelper.Current != ';')
         {
             ParserError error = new ParserError("Ожидалось число или оператор конца выражения \";\"", stringHelper.Index + 1, stringHelper.Index + 1);

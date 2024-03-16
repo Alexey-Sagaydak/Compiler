@@ -36,7 +36,7 @@ public class DeclareState : IState
                 {
                     if (error.Value != string.Empty)
                         errors.Add(error);
-                    errors.Add(new ParserError("Обнаружено незаконченное выражение lol", stringHelper.Index, stringHelper.Index, ErrorType.UnfinishedExpression));
+                    errors.Add(new ParserError("Обнаружено незаконченное выражение", stringHelper.Index, stringHelper.Index, ErrorType.UnfinishedExpression));
                     return false;
                 }
                 char currentSymbol = stringHelper.Current;

@@ -24,7 +24,7 @@ public class ParserError
     public bool IsModified {  get; set; }
     public string Message
     {
-        get => $"{message}" + ((ErrorType == ErrorType.Default) ? $"(Отброшенный фрагмент: \"{Value}\")" : "");
+        get => $"{message}" + ((ErrorType == ErrorType.Default) ? $" (Отброшенный фрагмент: \"{Value}\")" : "");
         set => message = value;
     }
 
