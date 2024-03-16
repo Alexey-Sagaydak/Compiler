@@ -173,7 +173,7 @@ DECLARE productPrice3 CONSTANT INTEGER := 150; DECLARE expense_amount_4 CONSTANT
 
 G[&lt;ЦК&gt; = &lt;целочисленная константа&gt;]:
 
-V<sub>T</sub> = { ‘CONSTANT’, ‘INTEGER’, ‘a’…’z’, ‘A’…’Z’, ‘0’…’9’, ‘:’, ‘;’, ‘+’, ‘-‘, ‘=’, ‘_’ }
+V<sub>T</sub> = { ‘DECLARE’, ‘CONSTANT’, ‘INTEGER’, ‘a’…’z’, ‘A’…’Z’, ‘0’…’9’, ‘:’, ‘;’, ‘+’, ‘-‘, ‘=’, ‘_’ }
 
 V<sub>N</sub> = { &lt;ЦК&gt;, E, CONST, INT, ASSIGN, NUMBER, SIGN, UNSIGNEDINT, END, Б, Ц }
 
