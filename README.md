@@ -267,3 +267,28 @@ P = {
 **Тема:** реализация метода рекурсивного спуска для синтаксического анализа.
 
 **Цель работы:** разработать для грамматики алгоритм синтаксического анализа на основе метода рекурсивного спуска.
+
+Для грамматики G[&lt;While&gt;] разработать и реализовать алгоритм анализа на основе метода рекурсивного спуска.
+                
+G[&lt;While&gt;]:
+1. &lt;While&gt; → while &lt;Cond&gt; do &lt;Stmt&gt; end ;
+2. &lt;Cond&gt; → &lt;LogExpr&gt; {or &lt;LogExpr&gt;}
+3. &lt;LogExpr&gt; → &lt;RelExpr&gt; {and &lt;RelExpr&gt;}
+4. &lt;RelExpr&gt; → &lt;Operand&gt; [rel &lt;Operand&gt;]
+5. &lt;Operand&gt; → var | const
+6. &lt;Stmt&gt; → var as &lt;ArithExpr&gt;
+7. &lt;ArithExpr&gt; → &lt;Operand&gt; {ao &lt;Operand&gt;}
+
+> Примечание: while, do, end, and, or – ключевые слова. В тип rel объединили операции сравнения <,<=, >=, >, != и ==, в тип ao арифметические операции + и -, в тип as оператор присваивания =, тип var – название переменной (только буквы), тип const – числа. Причина, по которой не объединены в один тип логические операции and и or заключается в том, что эти операции имеют различный приоритет.
+
+По классификации Хомского данная грамматика относится к КС.
+
+### Тестовые примеры
+
+```lua
+while a < b do b = b - 20 end;
+while a < b and c != d or e == f or g <= h and i > j do abc = cde - 20 + 40 - 8 + efg end;
+while a < b do b = a + ? end
+```
+
+![Тест 1](/README_images/recursion_test_1.png)

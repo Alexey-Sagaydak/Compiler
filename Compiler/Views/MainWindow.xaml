@@ -208,6 +208,57 @@
                     </Button.ToolTip>
                     <materialDesign:PackIcon Kind="AboutCircleOutline" />
                 </Button>
+                <Button Padding="5" HorizontalAlignment="Right" Click="Button_Click">
+                    <Button.ToolTip>
+                        <ToolTip Content="Дополнительные функции" />
+                    </Button.ToolTip>
+                    <materialDesign:PackIcon Kind="MoreVert" />
+                </Button>
+                <Popup x:Name="popupMenu" Placement="Mouse" StaysOpen="False" AllowsTransparency="True">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        
+                        <Button Grid.Column="0" Grid.Row="0" Padding="5" Background="WhiteSmoke" Foreground="Black" Content="ЛР №5"/>
+                        <Button Grid.Column="2" Grid.Row="0" Padding="5">
+                            <Button.ToolTip>
+                                <ToolTip Content="Задание" />
+                            </Button.ToolTip>
+                            <materialDesign:PackIcon Kind="AboutCircleOutline" />
+                        </Button>
+
+                        <Button Grid.Column="0" Grid.Row="1" Padding="5" Background="WhiteSmoke" Foreground="Black" Content="ЛР №6"/>
+                        <Button Grid.Column="2" Grid.Row="1" Padding="5">
+                            <Button.ToolTip>
+                                <ToolTip Content="Задание" />
+                            </Button.ToolTip>
+                            <materialDesign:PackIcon Kind="AboutCircleOutline" />
+                        </Button>
+
+                        <Button Grid.Column="0" Grid.Row="2" Padding="5" Command="{Binding ParseWhileCommand}" Background="WhiteSmoke" Foreground="Black" Content="ЛР №7: парсинг цикла while методом рекурсивного спуска"/>
+                        <Button Grid.Column="1" Grid.Row="2" Padding="5" Click="Button_Click_2">
+                            <Button.ToolTip>
+                                <ToolTip Content="Тестовый пример" />
+                            </Button.ToolTip>
+                            <materialDesign:PackIcon Kind="Code" />
+                        </Button>
+                        <Button Grid.Column="2" Grid.Row="2" Padding="5" Click="Button_Click_1">
+                            <Button.ToolTip>
+                                <ToolTip Content="Задание" />
+                            </Button.ToolTip>
+                            <materialDesign:PackIcon Kind="AboutCircleOutline" />
+                        </Button>
+                    </Grid>
+                </Popup>
             </ToolBar>
         </ToolBarTray>
 
@@ -256,6 +307,11 @@
                         <DataGridTextColumn Header="Местоположение" Binding="{Binding Position, Mode=OneWay}" DisplayIndex="4"/>
                     </DataGrid.Columns>
                 </DataGrid>
+            </TabItem>
+            <TabItem Header="Вывод" ToolTip="Вывод текста" VerticalAlignment="Stretch">
+                <ScrollViewer>
+                    <TextBlock x:Name="outputTextBlock" Margin="5" TextWrapping="WrapWithOverflow" Background="White" FontSize="16" Padding="0" Text="{Binding VMText}"/>
+                </ScrollViewer>
             </TabItem>
         </TabControl>
         

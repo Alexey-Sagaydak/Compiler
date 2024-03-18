@@ -150,6 +150,11 @@ namespace Compiler
             GetCaretPosition();
         }
 
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            popupMenu.IsOpen = true;
+        }
+
         private void textEditor_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             GetCaretPosition();
@@ -180,6 +185,7 @@ namespace Compiler
                     textEditor.FontSize = fontSize;
                     parserDataGrid.FontSize = fontSize;
                     lexerDataGrid.FontSize = fontSize;
+                    outputTextBlock.FontSize = fontSize;
                 }
                 catch { }
             }));
@@ -197,6 +203,33 @@ namespace Compiler
                 ((MainWindowViewModel)(DataContext)).RemoveErrorsCommand.Execute(null);
                 e.Handled = true;
             }
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("""
+                    Для грамматики G[<While>] разработать и реализовать алгоритм анализа на основе метода рекурсивного спуска.
+                
+                G[<While>]:
+                1. <While> → while <Cond> do <Stmt> end ;
+                2. <Cond> → <LogExpr> {or <LogExpr>}
+                3. <LogExpr> → <RelExpr> {and <RelExpr>}
+                4. <RelExpr> → <Operand> [rel <Operand>]
+                5. <Operand> → var | const
+                6. <Stmt> → var as <ArithExpr>
+                7. <ArithExpr> → <Operand> {ao <Operand>}
+
+                    Примечание: while, do, end, and, or – ключевые слова. В тип rel объединили операции сравнения <,<=, >=, >, != и ==, в тип ao арифметические операции + и -, в тип as оператор присваивания =, тип var – название переменной (только буквы), тип const – числа. Причина, по которой не объединены в один тип логические операции and и or заключается в том, что эти операции имеют различный приоритет. Пример цепочки: while a < b and b <= c do b=b+c-20 end;
+                """, "Задание", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            textEditor.Text = """
+                while a < b do b = b - 20 end;
+                while a < b and c != d or e == f or g <= h and i > j do abc = cde - 20 + 40 - 8 + efg end;
+                while a < b do b = a + ? end;
+                """;
         }
     }
 }

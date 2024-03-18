@@ -1,15 +1,18 @@
 ﻿using Microsoft.Win32;
 using System.Collections.ObjectModel;
 using System.Windows;
+using Lab7;
 
 namespace Compiler;
 
 public class MainWindowViewModel : ViewModelBase
 {
     private IParser _parser;
+    private WhileParser _whileParser;
 
     private FileManager _fileManager;
     private ILexicalAnalyzer _lexicalAnalyzer;
+    private WhileLexer _whileLexer;
 
     private const string _aboutPath = @"Resources\About.html";
     private const string _helpPath = @"Resources\Help.html";
@@ -45,16 +48,19 @@ public class MainWindowViewModel : ViewModelBase
     private RelayCommand _startAnalyzersCommand;
     private RelayCommand _viewSourceCodeCommand;
     private RelayCommand _removeErrorsCommand;
+    private RelayCommand _parseWhileCommand;
 
     public event EventHandler<StringEventArgs> StringSent;
     public event EventHandler<Lexeme> LexemeSent;
     public event EventHandler<ParserError> ErrorSent;
 
     private List<Lexeme> _lexemesList;
+    private List<Token> _tokensList;
     private ObservableCollection<Lexeme> _lexemes;
     private ObservableCollection<ParserError> _incorrectLexemes;
     private Lexeme _selectedLexeme;
     private ParserError _selectedError;
+    private string _vmText;
 
     public event EventHandler RequestClose;
 
@@ -133,6 +139,16 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
+    public string VMText
+    {
+        get { return _vmText; }
+        set
+        {
+            _vmText = value;
+            OnPropertyChanged(nameof(VMText));
+        }
+    }
+
     public string WindowTitle
     {
         get => $"Компилятор — {((CurrentFilePath == string.Empty) ? "Новый файл.txt" : "")}{_currentFilePath.Split(@"\").Last()}{(IsFileModified ? "*" : "")} {((CurrentFilePath != string.Empty) ? "(" : "")}{_currentFilePath}{((CurrentFilePath != string.Empty) ? ")" : "")}";
@@ -146,7 +162,8 @@ public class MainWindowViewModel : ViewModelBase
         IsFileModified = false;
         _lexicalAnalyzer = new LexicalAnalyzer();
         IncorrectLexemes = new ObservableCollection<ParserError>();
-
+        _whileLexer = new WhileLexer();
+        _whileParser = new WhileParser();
         _parser = new Parser(string.Empty);
     }
 
@@ -188,6 +205,11 @@ public class MainWindowViewModel : ViewModelBase
     public RelayCommand CreateNewFileCommand
     {
         get => _createNewFileCommand ??= new RelayCommand(CreateNewFile);
+    }
+
+    public RelayCommand ParseWhileCommand
+    {
+        get => _parseWhileCommand ??= new RelayCommand(ParseWhile);
     }
 
     public RelayCommand OpenFileCommand
@@ -238,6 +260,11 @@ public class MainWindowViewModel : ViewModelBase
     public RelayCommand RemoveErrorsCommand
     {
         get => _removeErrorsCommand ??= new RelayCommand(RemoveErrors);
+    }
+
+    public void ParseWhile(object obj)
+    {
+        VMText = _whileParser.Parse(_whileLexer.Analyze(_fileContent));
     }
 
     public void RemoveErrors(object obj)
